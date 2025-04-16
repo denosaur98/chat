@@ -9,9 +9,9 @@
           <img src="../../public/assets/icons/burger-icon.svg">
         </button>
         <Transition name="fade">
-          <div class="info__popup" v-if="isPopupOpen">
-            <button class="popup__button">Обратная связь о работе сервиса</button>
-            <button class="popup__button">Сменить помощника</button>
+          <div class="info__popup" v-if="isPopupOpen" v-click-outside="closePopup">
+            <button class="popup__button" @click="isPopupOpen = false">Обратная связь о работе сервиса</button>
+            <button class="popup__button" @click="isPopupOpen = false">Сменить помощника</button>
           </div>
         </Transition>
       </div>
@@ -61,6 +61,10 @@
 import { ref } from 'vue'
 
 const isPopupOpen = ref(false)
+
+function closePopup() {
+  isPopupOpen.value = false
+}
 </script>
 
 <style lang="scss" scoped>
@@ -132,6 +136,8 @@ const isPopupOpen = ref(false)
         box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.08);
         top: 50px;
         right: 0;
+        z-index: 999;
+        background: #fff;
 
         .popup__button {
           cursor: pointer;
@@ -300,7 +306,6 @@ const isPopupOpen = ref(false)
           gap: 8px;
 
           textarea {
-            cursor: pointer;
             border: none;
             resize: none;
             outline: none;
