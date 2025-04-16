@@ -18,14 +18,16 @@
     </div>
     <div class="place__chat">
       <p class="start__chat-time">Сегодня, 20:43</p>
-      <div class="chat__message-wrapper">
-        <img src="../../public/assets/images/user.png">
-        <div class="message__content">
-          <p class="message__item">Lörem ipsum suparad pepött då satsig och soskap metrosocial. Sapongar trenåvis i
-            hypol innan visiskap, heterovybelt. Besav ditugen stenosade om exopagt.</p>
-          <div class="item__info">
-            <p class="info__name">Jim</p>
-            <p class="info__time">20:43</p>
+      <div class="chat-messages">
+        <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
+          :class="{ 'my-message': message.isMine }">
+          <img :src="message.isMine ? userAvatar : botAvatar">
+          <div class="message__content">
+            <p class="message__item">{{ message.text }}</p>
+            <div class="item__info">
+              <p class="info__name">{{ message.isMine ? userName : 'Ассистент' }}</p>
+              <p class="info__time">{{ message.time }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -36,7 +38,7 @@
         </div>
         <div class="text__place-item">
           <div class="item__controls">
-            <textarea></textarea>
+            <textarea v-model="newMessage" @keyup.enter="sendMessage"></textarea>
             <div class="controls__buttons-wrapper">
               <div class="file-input-wrapper">
                 <input type="file" class="file-input">
@@ -48,7 +50,7 @@
               </div>
             </div>
           </div>
-          <button class="send__message-button">
+          <button class="send__message-button" @click="sendMessage">
             <img src="../../public/assets/icons/send-icon.svg">
           </button>
         </div>
@@ -65,6 +67,56 @@ const isPopupOpen = ref(false)
 function closePopup() {
   isPopupOpen.value = false
 }
+
+const userAvatar = ref('/assets/icons/user-icon.svg')
+const botAvatar = ref('/assets/images/user.png')
+const userName = ref('Jim Davidson')
+const newMessage = ref('')
+const messages = ref([])
+
+function formatTime() {
+  const now = new Date()
+  return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+
+function sendMessage() {
+  if (!newMessage.value.trim()) return
+
+  messages.value.push({
+    text: newMessage.value,
+    isMine: true,
+    time: formatTime()
+  })
+
+  newMessage.value = ''
+
+  setTimeout(() => {
+    messages.value.push({
+      text: `Вы написали: "${messages.value[messages.value.length - 1].text}"`,
+      isMine: false,
+      time: formatTime()
+    })
+
+    scrollToBottom()
+  }, 1000)
+
+  scrollToBottom()
+}
+
+function scrollToBottom() {
+  const container = document.querySelector('.chat-messages')
+  if (container) {
+    setTimeout(() => {
+      container.scrollTop = container.scrollHeight
+    }, 50)
+  }
+}
+
+messages.value.push({
+  text: 'Добрый день! Чем могу помочь?',
+  isMine: false,
+  time: formatTime()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -165,7 +217,7 @@ function closePopup() {
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 160px 20px;
     overflow-y: auto;
     background: rgb(235, 235, 235);
     --scrollbar-background: #f5f5f5;
@@ -210,13 +262,32 @@ function closePopup() {
         background-size: cover;
       }
 
+      &.my-message {
+        justify-content: flex-end;
+
+        .message__content {
+          align-items: flex-start;
+
+          .message__item {
+            max-width: 500px;
+            width: 100%;
+            background: rgb(244, 212, 237);
+            border-radius: 12px 12px 0 12px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            hyphens: auto;
+          }
+        }
+      }
+
       .message__content {
         display: flex;
         flex-direction: column;
         gap: 8px;
 
         .message__item {
-          width: 70%;
+          max-width: 500px;
+          width: 100%;
           background: #fff;
           padding: 15px 20px;
           color: rgb(0, 0, 0);
@@ -225,6 +296,9 @@ function closePopup() {
           line-height: 145%;
           text-align: left;
           border-radius: 12px;
+          word-break: break-word;
+          overflow-wrap: anywhere;
+          hyphens: auto;
         }
 
         .item__info {
