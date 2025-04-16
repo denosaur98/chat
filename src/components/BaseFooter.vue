@@ -33,14 +33,12 @@
 
 <style lang="scss" scoped>
 .base-footer {
-  position: absolute;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   padding: 40px 120px;
   background: #EBEBEB;
-  bottom: 0;
 
   .footer__logo {
     height: 32px;

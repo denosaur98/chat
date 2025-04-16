@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <BaseHeader />
-    <RouterView />
+    <main class="app-content">
+      <RouterView />
+    </main>
     <BaseFooter />
   </div>
 </template>
@@ -26,9 +28,14 @@ import BaseFooter from './components/BaseFooter'
 }
 
 .app {
+  display: flex;
+  flex-direction: column;
   background: #f5f5f5;
   width: 100%;
-  height: 100%;
   min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
 }
 </style>

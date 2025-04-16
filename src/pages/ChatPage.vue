@@ -16,8 +16,8 @@ import ChatWindow from '../components/ChatWindow'
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 120px;
+  padding: 0 120px 60px;
   width: 100%;
-  height: 100%;
+  flex: 1;
 }
 </style>

@@ -68,14 +68,31 @@ const isReportsOpen = ref(false)
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   max-width: 295px;
   padding: 28px 20px;
   background: #fff;
   border-radius: 20px;
   width: 100%;
-  height: 100%;
   gap: 30px;
+  height: 100%;
+  height: 600px;
+  overflow-y: auto;
+  --scrollbar-background: #f5f5f5;
+  --scrollbar-thumb: rgb(244, 212, 237);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: var(--scrollbar-background);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb);
+  }
 
   .sidebar__title {
     color: rgb(0, 0, 0);
