@@ -1,11 +1,224 @@
 <template>
-  <div></div>
+  <div class="base-sidebar">
+    <h1 class="sidebar__title">Файлы</h1>
+    <div class="sidebar__items-wrapper">
+      <button class="sidebar__accordion" @click="isMediaPlanOpen = !isMediaPlanOpen">
+        Медиапланы
+        <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
+      </button>
+      <Transition name="bounce">
+        <div class="document__container" v-if="isMediaPlanOpen">
+          <div class="items__document-wrapper" v-for="document in FilesData.mediaPlans" :key="document.id">
+            <div class="items__document">
+              <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
+              <h2 class="document__title">{{ document.title }}</h2>
+              <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
+                <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
+                <img src="../../public/assets/icons/download-icon.svg" v-else>
+              </button>
+            </div>
+            <div class="document__warning" v-if="document.status === 'prepare'">
+              <img src="../../public/assets/icons/warning-icon.svg">
+              <p>Медиаплан в процессе составления</p>
+            </div>
+          </div>
+          <button class="items__show-more">Показать еще</button>
+        </div>
+      </Transition>
+    </div>
+    <div class="sidebar__items-wrapper">
+      <button class="sidebar__accordion" @click="isReportsOpen = !isReportsOpen">
+        Отчеты
+        <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
+      </button>
+      <Transition name="bounce">
+        <div class="document__container" v-if="isReportsOpen">
+          <div class="items__document-wrapper" v-for="document in FilesData.reports" :key="document.id">
+            <div class="items__document">
+              <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
+              <h2 class="document__title">{{ document.title }}</h2>
+              <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
+                <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
+                <img src="../../public/assets/icons/download-icon.svg" v-else>
+              </button>
+            </div>
+            <div class="document__warning" v-if="document.status === 'prepare'">
+              <img src="../../public/assets/icons/warning-icon.svg">
+              <p>Медиаплан в процессе составления</p>
+            </div>
+          </div>
+          <button class="items__show-more">Показать еще</button>
+        </div>
+      </Transition>
+    </div>
+  </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import FilesData from '../../server/files.json';
+
+const isMediaPlanOpen = ref(false)
+const isReportsOpen = ref(false)
 
 </script>
 
 <style lang="scss" scoped>
+.base-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 295px;
+  padding: 28px 20px;
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  gap: 30px;
 
+  .sidebar__title {
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0%;
+    text-align: left;
+  }
+
+  .sidebar__items-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+
+    .sidebar__accordion {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      color: rgb(0, 0, 0);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 22px;
+      letter-spacing: 0%;
+      text-align: left;
+      border: none;
+      background: none;
+  
+      img {
+        width: 25px;
+        height: 25px;
+        transform: rotate(180deg);
+  
+        &.active {
+          transform: rotate(0);
+        }
+      }
+    }
+
+    .document__container, .items__document-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+
+      .items__document {
+        display: flex;
+        align-items: center;
+        background: rgb(245, 245, 245);
+        width: 100%;
+        height: 42px;
+        border-radius: 4px;
+    
+        .document__icon {
+          width: 25px;
+          height: 25px;
+          margin: 0 10px;
+        }
+    
+        .document__title {
+          color: rgb(0, 0, 0);
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 135%;
+          letter-spacing: 0%;
+          text-align: left;
+        }
+    
+        .document__button {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 100%;
+          margin-left: auto;
+          border: none;
+          border-radius: 4px;
+
+          &.refresh {background: rgb(148, 148, 148);}
+          &.download {background: rgb(244, 212, 237);}
+    
+          img {
+            width: 25px;
+            height: 25px;
+          }
+        }
+      }
+
+      .document__warning {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 5px;
+        
+        p {
+          color: rgb(82, 82, 82);
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 135%;
+          letter-spacing: 0%;
+          text-align: left;
+        }
+      }
+    }
+
+    .items__show-more {
+      cursor: pointer;
+      color: rgb(238, 38, 194);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 18px;
+      letter-spacing: 0%;
+      text-align: left;
+      margin-left: auto;
+      border: none;
+      background: none;
+    }
+  }
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.3s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in 0.3s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

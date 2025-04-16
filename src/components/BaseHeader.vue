@@ -1,23 +1,23 @@
 <template>
   <header class="base-header">
     <RouterLink to="/">
-      <img src="../assets/images/logo.svg" class="header__logo">
+      <img src="../../public/assets/images/logo.svg" class="header__logo">
     </RouterLink>
     <div class="header__control">
       <div class="control__items">
-        <img src="../assets/icons/card-icon.svg">
+        <img src="../../public/assets/icons/card-icon.svg">
         <p>5%</p>
       </div>
       <div class="control__items">
-        <img src="../assets/icons/user-icon.svg">
+        <img src="../../public/assets/icons/user-icon.svg">
         <RouterLink to="/">Username@adaurum.ru</RouterLink>
       </div>
       <div class="control__items">
         <RouterLink to="/" class="items__button">
-          <img src="../assets/icons/setting-icon.svg">
+          <img src="../../public/assets/icons/setting-icon.svg">
         </RouterLink>
         <RouterLink to="/" class="items__button">
-          <img src="../assets/icons/logout-icon.svg">
+          <img src="../../public/assets/icons/logout-icon.svg">
         </RouterLink>
       </div>
     </div>

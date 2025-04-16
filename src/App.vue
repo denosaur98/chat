@@ -15,7 +15,7 @@ import BaseFooter from './components/BaseFooter'
 <style>
 @font-face {
   font-family: Inter;
-  src: url('./assets/fonts/Inter.ttf');
+  src: url('/public/assets/fonts/Inter.ttf');
 }
 
 * {

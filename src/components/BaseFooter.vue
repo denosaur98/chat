@@ -1,26 +1,26 @@
 <template>
   <footer class="base-footer">
     <RouterLink to="/">
-      <img src="../assets/images/logo-grey.svg" class="header__logo">
+      <img src="../../public/assets/images/logo.svg" class="header__logo">
     </RouterLink>
     <div class="footer__control">
       <RouterLink to="/" class="control__item">Политика конфиденциальности</RouterLink>
       <RouterLink to="/" class="control__item">
-        <img src="../assets/icons/sms-icon.svg">
+        <img src="../../public/assets/icons/sms-icon.svg">
         pinkchicken@adaurum.ru
       </RouterLink>
       <div class="control__items-wrapper">
-        <img src="../assets/icons/global-icon.svg">
+        <img src="../../public/assets/icons/global-icon.svg">
         <button class="control__item active">RU</button>
         <button class="control__item">EN</button>
         <button class="control__item">TUR</button>
       </div>
       <div class="control__items-wrapper">
         <RouterLink to="/" class="items__social">
-          <img src="../assets/icons/tg-icon.svg">
+          <img src="../../public/assets/icons/tg-icon.svg">
         </RouterLink>
         <RouterLink to="/" class="items__social">
-          <img src="../assets/icons/wa-icon.svg">
+          <img src="../../public/assets/icons/wa-icon.svg">
         </RouterLink>
       </div>
     </div>
