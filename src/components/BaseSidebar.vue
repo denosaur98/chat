@@ -6,7 +6,7 @@
         Медиапланы
         <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
       </button>
-      <Transition name="bounce">
+      <Transition name="fade">
         <div class="document__container" v-if="isMediaPlanOpen">
           <div class="items__document-wrapper" v-for="document in FilesData.mediaPlans" :key="document.id">
             <div class="items__document">
@@ -31,7 +31,7 @@
         Отчеты
         <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
       </button>
-      <Transition name="bounce">
+      <Transition name="fade">
         <div class="document__container" v-if="isReportsOpen">
           <div class="items__document-wrapper" v-for="document in FilesData.reports" :key="document.id">
             <div class="items__document">
@@ -217,25 +217,13 @@ const isReportsOpen = ref(false)
   }
 }
 
-.bounce-enter-active {
-  animation: bounce-in 0.3s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.bounce-leave-active {
-  animation: bounce-in 0.3s reverse;
-}
-
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-
-  50% {
-    transform: scale(1.02);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
