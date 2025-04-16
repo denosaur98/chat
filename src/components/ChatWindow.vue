@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-page"></div>
+  <div class="chat-window"></div>
 </template>
 
 <script setup>
@@ -7,7 +7,7 @@
 </script>
 
 <style lang="scss" scoped>
-.chat-page {
+.chat-window {
   height: 100%;
 }
 </style>
