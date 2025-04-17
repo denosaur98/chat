@@ -15,7 +15,7 @@ export default createStore({
 	actions: {
 		async fetchFiles({ commit }) {
 			try {
-				const response = await axios.get(`${process.env.VUE_APP_API_URL}/files`)
+				const response = await axios.get(`${process.env.API_URL}/files`)
 				commit('SET_FILES', response.data)
 				return response.data
 			} catch (e) {
