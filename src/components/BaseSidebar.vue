@@ -1,15 +1,15 @@
 <template>
   <div class="base-sidebar">
     <h1 class="sidebar__title">Файлы</h1>
-    <div class="accordion-wrapper">
+    <div class="accordion-wrapper" v-if="hasFilesData">
       <div class="sidebar__items-wrapper">
         <button class="sidebar__accordion media__plan-btn" @click="isMediaPlanOpen = !isMediaPlanOpen">
           Медиапланы
           <img src="../../public/assets/icons/arrow-icon.svg" class="arrow-icon" :class="isMediaPlanOpen ? 'active' : ''">
-          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="props.filesData && props.filesData.mediaPlans.length > 0">
+          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="hasMediaPlans">
         </button>
         <Transition name="fade">
-          <div class="document__container" v-if="isMediaPlanOpen">
+          <div class="document__container" v-if="isMediaPlanOpen && hasMediaPlans">
             <div class="items__document-wrapper" v-for="document in props.filesData.mediaPlans" :key="document.id">
               <div class="items__document">
                 <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
@@ -32,10 +32,10 @@
         <button class="sidebar__accordion reports__btn" @click="isReportsOpen = !isReportsOpen">
           Отчеты
           <img src="../../public/assets/icons/arrow-icon.svg" class="arrow-icon" :class="isReportsOpen ? 'active' : ''">
-          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="props.filesData && props.filesData.mediaPlans.length > 0">
+          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="hasReports">
         </button>
         <Transition name="fade">
-          <div class="document__container" v-if="isReportsOpen">
+          <div class="document__container" v-if="isReportsOpen && hasReports">
             <div class="items__document-wrapper" v-for="document in props.filesData.reports" :key="document.id">
               <div class="items__document">
                 <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
@@ -55,11 +55,15 @@
         </Transition>
       </div>
     </div>
+    <div class="sidebar__is-empty" v-else>
+      <img src="../../public/assets/images/sidebar-empty.png">
+      <p>Закажи у личного помощника медиаплан. Он появится в этом разделе</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 
 const isMediaPlanOpen = ref(false)
 const isReportsOpen = ref(false)
@@ -67,9 +71,14 @@ const isReportsOpen = ref(false)
 const props = defineProps({
   filesData: {
     type: Object,
-    required: true
+    required: true,
+    default: () => ({ mediaPlans: [], reports: [] })
   }
 })
+
+const hasFilesData = computed(() => props.filesData && (props.filesData.mediaPlans || props.filesData.reports))
+const hasMediaPlans = computed(() => props.filesData?.mediaPlans?.length > 0)
+const hasReports = computed(() => props.filesData?.reports?.length > 0)
 </script>
 
 <style lang="scss" scoped>
@@ -300,6 +309,26 @@ const props = defineProps({
         border: none;
         background: none;
       }
+    }
+  }
+
+  .sidebar__is-empty {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    p {
+      color: rgb(0, 0, 0);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 145%;
+      text-align: center;
     }
   }
 }
