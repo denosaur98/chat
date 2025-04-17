@@ -14,7 +14,7 @@ import BaseFooter from './components/BaseFooter'
 
 </script>
 
-<style>
+<style lang="scss">
 @font-face {
   font-family: Inter;
   src: url('/public/assets/fonts/Inter.ttf');
@@ -33,9 +33,13 @@ import BaseFooter from './components/BaseFooter'
   background: #f5f5f5;
   width: 100%;
   min-height: 100vh;
-}
 
-.app-content {
-  flex: 1;
+  @media (max-width: 800px) {
+    background: #fff;
+  }
+
+  .app-content {
+    flex: 1;
+  }
 }
 </style>

@@ -8,7 +8,7 @@
     </div>
     <div class="footer__control">
       <RouterLink to="/" class="control__politic-desktop">Политика конфиденциальности</RouterLink>
-      <RouterLink to="/" class="control__item">
+      <RouterLink to="/" class="control__item mail">
         <img src="../../public/assets/icons/sms-icon.svg">
         pinkchicken@adaurum.ru
       </RouterLink>
@@ -53,6 +53,10 @@
     gap: 20px;
   }
 
+  @media (max-width: 800px) {
+    padding: 40px 20px;
+  }
+
   .footer__logo {
     height: 32px;
     width: 220px;
@@ -61,6 +65,13 @@
   @media (max-width: 1100px) {
     .contacts {order: 1;}
     .lang {order: 2;}
+    .mail {order: 3;}
+  }
+
+  @media (max-width: 800px) {
+    .lang {order: 2;}
+    .mail {order: 3;}
+    .contacts {order: 4;}
   }
 
   .footer__control {
@@ -70,6 +81,11 @@
 
     @media (max-width: 1350px) {
       gap: 30px;
+    }
+
+    @media (max-width: 800px) {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .control__politic-desktop {
@@ -89,6 +105,11 @@
       @media (max-width: 1100px) {
         display: none;
       }
+
+      @media (max-width: 800px) {
+        display: flex;
+        order: 1;
+      }
     }
 
     .control__politic-mobile {
@@ -107,6 +128,10 @@
         letter-spacing: 0%;
         text-align: left;
         text-decoration: none;
+      }
+
+      @media (max-width: 800px) {
+        display: none;
       }
     }
 

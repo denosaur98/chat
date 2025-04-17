@@ -3,7 +3,7 @@
     <h1 class="sidebar__title">Файлы</h1>
     <div class="accordion-wrapper">
       <div class="sidebar__items-wrapper">
-        <button class="sidebar__accordion" @click="isMediaPlanOpen = !isMediaPlanOpen">
+        <button class="sidebar__accordion media__plan-btn" @click="isMediaPlanOpen = !isMediaPlanOpen">
           Медиапланы
           <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
         </button>
@@ -28,7 +28,7 @@
         </Transition>
       </div>
       <div class="sidebar__items-wrapper">
-        <button class="sidebar__accordion" @click="isReportsOpen = !isReportsOpen">
+        <button class="sidebar__accordion reports__btn" @click="isReportsOpen = !isReportsOpen">
           Отчеты
           <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
         </button>
@@ -91,7 +91,11 @@ const props = defineProps({
   @media (max-width: 1100px) {
     width: 100%;
     max-width: 100%;
-    height: 470px;
+    height: max-content;
+  }
+
+  @media (max-width: 800px) {
+    padding: 5px;
   }
 
   &::-webkit-scrollbar {
@@ -114,6 +118,10 @@ const props = defineProps({
     line-height: 29px;
     letter-spacing: 0%;
     text-align: left;
+
+    @media (max-width: 800px) {
+      display: none;
+    }
   }
 
   .accordion-wrapper {
@@ -146,11 +154,37 @@ const props = defineProps({
         text-align: left;
         border: none;
         background: none;
+
+        @media (max-width: 800px) {
+          padding: 12px;
+        }
+
+        &.media__plan-btn {
+          border: none;
+        
+          @media (max-width: 800px) {
+            border: 1px solid rgb(238, 38, 194);
+            border-radius: 4px;
+          }
+        }
+
+        &.reports__btn {
+          border: none;
+
+          @media (max-width: 800px) {
+            border: 1px solid rgb(38, 118, 238);
+            border-radius: 4px;
+          }
+        }
     
         img {
           width: 25px;
           height: 25px;
           transform: rotate(180deg);
+
+          @media (max-width: 800px) {
+            display: none;
+          }
     
           &.active {
             transform: rotate(0);

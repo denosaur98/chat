@@ -153,11 +153,23 @@ messages.value.push({
   height: 100%;
   height: 600px;
 
+  @media (max-width: 800px) {
+    padding: 0;
+    height: 800px;
+  }
+
   .window__navigation {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
+    @media (max-width: 800px) {
+      position: relative;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
 
     h1 {
       color: rgb(0, 0, 0);
@@ -173,6 +185,10 @@ messages.value.push({
       display: flex;
       align-items: center;
       gap: 10px;
+
+      @media (max-width: 800px) {
+        position: static;
+      }
 
       .info__nickname {
         font-size: 15px;
@@ -196,6 +212,12 @@ messages.value.push({
         background: rgb(245, 245, 245);
         border: none;
         margin-left: 15px;
+
+        @media (max-width: 800px) {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
       }
 
       .info__popup {
@@ -246,6 +268,10 @@ messages.value.push({
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     margin: 20px 0 0;
+
+    @media (max-width: 800px) {
+      height: calc(100% - 245px);
+    }
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -360,11 +386,21 @@ messages.value.push({
     left: 0;
     padding: 0 28px;
 
+    @media (max-width: 800px) {
+      padding: 0;
+    }
+
     .chat__offers-buttons-wrapper {
       display: flex;
       align-items: center;
       padding: 0 20px;
       gap: 12px;
+
+      @media (max-width: 800px) {
+        margin-left: auto;
+        flex-direction: column;
+        align-items: flex-end;
+      }
 
       .chat__offers-button {
         cursor: pointer;
@@ -381,10 +417,18 @@ messages.value.push({
 
         &.media__plan {
           background: rgb(238, 38, 194);
+
+          @media (max-width: 800px) {
+            order: 2;
+          }
         }
 
         &.report {
           background: rgb(38, 118, 238);
+
+          @media (max-width: 800px) {
+            order: 1;
+          }
         }
       }
     }
