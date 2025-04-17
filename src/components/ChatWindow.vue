@@ -32,8 +32,8 @@
     </div>
     <div class="chat__text-place-wrapper">
       <div class="chat__offers-buttons-wrapper">
-        <button class="chat__offers-button media__plan">Заказать медиаплан</button>
-        <button class="chat__offers-button report">Заказать отчет</button>
+        <button class="chat__offers-button media__plan" @click="orderDocument('mediaPlan')">Заказать медиаплан</button>
+        <button class="chat__offers-button report" @click="orderDocument('report')">Заказать отчет</button>
       </div>
       <div class="text__place-item">
         <div class="item__controls">
@@ -108,6 +108,28 @@ function scrollToBottom() {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
     }
   })
+}
+
+function orderDocument(document) {
+  const randomId = Math.floor(10000 + Math.random() * 90000)
+
+  if(document === 'mediaPlan') {
+    messages.value.push({
+      text: `Новый медиаплан № ${randomId} успешно создан!`,
+      isMine: false,
+      time: formatTime()
+    })
+
+    scrollToBottom()
+  } else {
+    messages.value.push({
+      text: `Новый отчет № ${randomId} успешно сформирован!`,
+      isMine: false,
+      time: formatTime()
+    })
+
+    scrollToBottom()
+  }
 }
 
 messages.value.push({
@@ -253,6 +275,7 @@ messages.value.push({
       display: flex;
       align-items: flex-start;
       gap: 15px;
+      margin-bottom: 30px;
 
       img {
         max-width: 50px;

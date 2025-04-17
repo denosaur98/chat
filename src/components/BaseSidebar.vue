@@ -44,7 +44,7 @@
             </div>
             <div class="document__warning" v-if="document.status === 'prepare'">
               <img src="../../public/assets/icons/warning-icon.svg">
-              <p>Медиаплан в процессе составления</p>
+              <p>Отчет в процессе составления</p>
             </div>
           </div>
           <button class="items__show-more">Показать еще</button>
