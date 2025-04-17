@@ -1,15 +1,24 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 
+const getDefaultState = () => ({
+	filesData: {},
+	isAuthorized: false,
+	userData: {},
+})
+
 export default createStore({
-	state() {
-		return {
-			filesData: null,
-		}
-	},
+	state: getDefaultState,
 	mutations: {
 		SET_FILES(state, data) {
 			state.filesData = data
+		},
+		SET_AUTH(state, payload) {
+			state.isAuthorized = payload.isAuthorized
+			state.userData = payload.userData
+		},
+		RESET_STATE(state) {
+			Object.assign(state, getDefaultState())
 		},
 	},
 	actions: {
@@ -21,6 +30,9 @@ export default createStore({
 			} catch (e) {
 				console.error(e)
 			}
+		},
+		resetState({ commit }) {
+			commit('RESET_STATE')
 		},
 	},
 })

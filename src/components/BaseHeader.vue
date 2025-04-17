@@ -1,5 +1,5 @@
 <template>
-  <header class="base-header">
+  <header class="base-header" v-if="store.state.isAuthorized">
     <RouterLink to="/">
       <img src="../../public/assets/images/logo.svg" class="header__logo">
     </RouterLink>
@@ -11,14 +11,14 @@
         </div>
         <div class="control__items user">
           <img src="../../public/assets/icons/user-icon.svg">
-          <RouterLink to="/">Username@adaurum.ru</RouterLink>
+          <RouterLink to="/" v-if="store.state.userData?.mail">{{ store.state.userData.mail }}</RouterLink>
         </div>
       </div>
       <div class="control__items">
         <RouterLink to="/" class="items__button">
           <img src="../../public/assets/icons/setting-icon.svg">
         </RouterLink>
-        <RouterLink to="/" class="items__button">
+        <RouterLink to="/" class="items__button" @click.prevent="logout">
           <img src="../../public/assets/icons/logout-icon.svg">
         </RouterLink>
       </div>
@@ -27,7 +27,19 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import store from '../store/index.js'
 
+const router = useRouter()
+
+async function logout() {
+  try {
+    await store.dispatch('resetState')
+    router.push('/')
+  } catch (e) {
+    console.error(e)
+  }
+}
 </script>
 
 <style lang="scss" scoped>

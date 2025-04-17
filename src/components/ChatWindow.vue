@@ -3,8 +3,8 @@
     <div class="window__navigation">
       <h1>Личный помощник</h1>
       <div class="navigation__info">
-        <p class="info__nickname">Jim Davidson</p>
-        <p class="info__mail">Jim Davidson@adaurum.ru</p>
+        <p class="info__nickname">{{ store.state.userData.login }}</p>
+        <p class="info__mail">{{ store.state.userData.mail }}</p>
         <button class="info__menu" @click="togglePopup">
           <img src="../../public/assets/icons/burger-icon.svg">
         </button>
@@ -24,7 +24,7 @@
         <div class="message__content">
           <p class="message__item">{{ message.text }}</p>
           <div class="item__info">
-            <p class="info__name">{{ message.isMine ? userName : 'Ассистент' }}</p>
+            <p class="info__name">{{ message.isMine ? store.state.userData.login : 'Ассистент' }}</p>
             <p class="info__time">{{ message.time }}</p>
           </div>
         </div>
@@ -59,6 +59,7 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
+import store from '../store/index'
 
 const isPopupOpen = ref(false)
 const messagesContainer = ref(null)
@@ -75,7 +76,6 @@ function closePopup(event) {
 
 const userAvatar = ref('/assets/icons/user-icon.svg')
 const botAvatar = ref('/assets/images/user.png')
-const userName = ref('Jim Davidson')
 const newMessage = ref('')
 const messages = ref([])
 
