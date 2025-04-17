@@ -5,7 +5,8 @@
       <div class="sidebar__items-wrapper">
         <button class="sidebar__accordion media__plan-btn" @click="isMediaPlanOpen = !isMediaPlanOpen">
           Медиапланы
-          <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
+          <img src="../../public/assets/icons/arrow-icon.svg" class="arrow-icon" :class="isMediaPlanOpen ? 'active' : ''">
+          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="props.filesData && props.filesData.mediaPlans.length > 0">
         </button>
         <Transition name="fade">
           <div class="document__container" v-if="isMediaPlanOpen">
@@ -30,7 +31,8 @@
       <div class="sidebar__items-wrapper">
         <button class="sidebar__accordion reports__btn" @click="isReportsOpen = !isReportsOpen">
           Отчеты
-          <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
+          <img src="../../public/assets/icons/arrow-icon.svg" class="arrow-icon" :class="isReportsOpen ? 'active' : ''">
+          <img src="../../public/assets/icons/checkmark-icon.svg" class="checkmark-icon" v-if="props.filesData && props.filesData.mediaPlans.length > 0">
         </button>
         <Transition name="fade">
           <div class="document__container" v-if="isReportsOpen">
@@ -134,6 +136,10 @@ const props = defineProps({
       flex-direction: row;
     }
 
+    @media (max-width: 800px) {
+      gap: 8px;
+    }
+
     .sidebar__items-wrapper {
       display: flex;
       flex-direction: column;
@@ -177,7 +183,7 @@ const props = defineProps({
           }
         }
     
-        img {
+        .arrow-icon {
           width: 25px;
           height: 25px;
           transform: rotate(180deg);
@@ -188,6 +194,16 @@ const props = defineProps({
     
           &.active {
             transform: rotate(0);
+          }
+        }
+
+        .checkmark-icon {
+          display: none;
+
+          @media (max-width: 800px) {
+            display: flex;
+            width: 25px;
+            height: 25px;
           }
         }
       }
@@ -210,6 +226,10 @@ const props = defineProps({
             width: 25px;
             height: 25px;
             margin: 0 10px;
+
+            @media (max-width: 800px) {
+              display: none;
+            }
           }
       
           .document__title {
@@ -219,6 +239,11 @@ const props = defineProps({
             line-height: 135%;
             letter-spacing: 0%;
             text-align: left;
+
+            @media (max-width: 800px) {
+              font-size: 12px;
+              margin: 0 10px;
+            }
           }
       
           .document__button {
@@ -255,6 +280,10 @@ const props = defineProps({
             line-height: 135%;
             letter-spacing: 0%;
             text-align: left;
+
+            @media (max-width: 800px) {
+              font-size: 10px;
+            }
           }
         }
       }
