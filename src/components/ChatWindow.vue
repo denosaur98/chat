@@ -5,13 +5,13 @@
       <div class="navigation__info">
         <p class="info__nickname">Jim Davidson</p>
         <p class="info__mail">Jim Davidson@adaurum.ru</p>
-        <button class="info__menu" @click="isPopupOpen = !isPopupOpen">
+        <button class="info__menu" @click="togglePopup">
           <img src="../../public/assets/icons/burger-icon.svg">
         </button>
         <Transition name="fade">
           <div class="info__popup" v-if="isPopupOpen" v-click-outside="closePopup">
-            <button class="popup__button" @click="isPopupOpen = false">Обратная связь о работе сервиса</button>
-            <button class="popup__button" @click="isPopupOpen = false">Сменить помощника</button>
+            <button class="popup__button" @click="closePopup">Обратная связь о работе сервиса</button>
+            <button class="popup__button" @click="closePopup">Сменить помощника</button>
           </div>
         </Transition>
       </div>
@@ -63,8 +63,14 @@ import { ref, nextTick } from 'vue'
 const isPopupOpen = ref(false)
 const messagesContainer = ref(null)
 
-function closePopup() {
-  isPopupOpen.value = false
+function togglePopup() {
+  isPopupOpen.value = !isPopupOpen.value
+}
+
+function closePopup(event) {
+  if (!event?.target.closest('.info__menu')) {
+    isPopupOpen.value = false
+  }
 }
 
 const userAvatar = ref('/assets/icons/user-icon.svg')
