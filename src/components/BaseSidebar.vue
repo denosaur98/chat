@@ -1,55 +1,57 @@
 <template>
   <div class="base-sidebar">
     <h1 class="sidebar__title">Файлы</h1>
-    <div class="sidebar__items-wrapper">
-      <button class="sidebar__accordion" @click="isMediaPlanOpen = !isMediaPlanOpen">
-        Медиапланы
-        <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
-      </button>
-      <Transition name="fade">
-        <div class="document__container" v-if="isMediaPlanOpen">
-          <div class="items__document-wrapper" v-for="document in props.filesData.mediaPlans" :key="document.id">
-            <div class="items__document">
-              <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
-              <h2 class="document__title">{{ document.title }}</h2>
-              <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
-                <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
-                <img src="../../public/assets/icons/download-icon.svg" v-else>
-              </button>
+    <div class="accordion-wrapper">
+      <div class="sidebar__items-wrapper">
+        <button class="sidebar__accordion" @click="isMediaPlanOpen = !isMediaPlanOpen">
+          Медиапланы
+          <img src="../../public/assets/icons/arrow-icon.svg" :class="isMediaPlanOpen ? 'active' : ''">
+        </button>
+        <Transition name="fade">
+          <div class="document__container" v-if="isMediaPlanOpen">
+            <div class="items__document-wrapper" v-for="document in props.filesData.mediaPlans" :key="document.id">
+              <div class="items__document">
+                <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
+                <h2 class="document__title">{{ document.title }}</h2>
+                <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
+                  <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
+                  <img src="../../public/assets/icons/download-icon.svg" v-else>
+                </button>
+              </div>
+              <div class="document__warning" v-if="document.status === 'prepare'">
+                <img src="../../public/assets/icons/warning-icon.svg">
+                <p>Медиаплан в процессе составления</p>
+              </div>
             </div>
-            <div class="document__warning" v-if="document.status === 'prepare'">
-              <img src="../../public/assets/icons/warning-icon.svg">
-              <p>Медиаплан в процессе составления</p>
-            </div>
+            <button class="items__show-more">Показать еще</button>
           </div>
-          <button class="items__show-more">Показать еще</button>
-        </div>
-      </Transition>
-    </div>
-    <div class="sidebar__items-wrapper">
-      <button class="sidebar__accordion" @click="isReportsOpen = !isReportsOpen">
-        Отчеты
-        <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
-      </button>
-      <Transition name="fade">
-        <div class="document__container" v-if="isReportsOpen">
-          <div class="items__document-wrapper" v-for="document in props.filesData.reports" :key="document.id">
-            <div class="items__document">
-              <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
-              <h2 class="document__title">{{ document.title }}</h2>
-              <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
-                <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
-                <img src="../../public/assets/icons/download-icon.svg" v-else>
-              </button>
+        </Transition>
+      </div>
+      <div class="sidebar__items-wrapper">
+        <button class="sidebar__accordion" @click="isReportsOpen = !isReportsOpen">
+          Отчеты
+          <img src="../../public/assets/icons/arrow-icon.svg" :class="isReportsOpen ? 'active' : ''">
+        </button>
+        <Transition name="fade">
+          <div class="document__container" v-if="isReportsOpen">
+            <div class="items__document-wrapper" v-for="document in props.filesData.reports" :key="document.id">
+              <div class="items__document">
+                <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
+                <h2 class="document__title">{{ document.title }}</h2>
+                <button :class="document.status === 'prepare' ? 'document__button refresh' : 'document__button download'">
+                  <img src="../../public/assets/icons/refresh-icon.svg" v-if="document.status === 'prepare'">
+                  <img src="../../public/assets/icons/download-icon.svg" v-else>
+                </button>
+              </div>
+              <div class="document__warning" v-if="document.status === 'prepare'">
+                <img src="../../public/assets/icons/warning-icon.svg">
+                <p>Отчет в процессе составления</p>
+              </div>
             </div>
-            <div class="document__warning" v-if="document.status === 'prepare'">
-              <img src="../../public/assets/icons/warning-icon.svg">
-              <p>Отчет в процессе составления</p>
-            </div>
+            <button class="items__show-more">Показать еще</button>
           </div>
-          <button class="items__show-more">Показать еще</button>
-        </div>
-      </Transition>
+        </Transition>
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +88,12 @@ const props = defineProps({
   --scrollbar-background: #f5f5f5;
   --scrollbar-thumb: rgb(244, 212, 237);
 
+  @media (max-width: 1100px) {
+    width: 100%;
+    max-width: 100%;
+    height: 470px;
+  }
+
   &::-webkit-scrollbar {
     width: 6px;
     background-color: var(--scrollbar-background);
@@ -108,116 +116,127 @@ const props = defineProps({
     text-align: left;
   }
 
-  .sidebar__items-wrapper {
+  .accordion-wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 8px;
+    gap: 30px;
 
-    .sidebar__accordion {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      color: rgb(0, 0, 0);
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 22px;
-      letter-spacing: 0%;
-      text-align: left;
-      border: none;
-      background: none;
-  
-      img {
-        width: 25px;
-        height: 25px;
-        transform: rotate(180deg);
-  
-        &.active {
-          transform: rotate(0);
-        }
-      }
+    @media (max-width: 1100px) {
+      flex-direction: row;
     }
 
-    .document__container, .items__document-wrapper {
+    .sidebar__items-wrapper {
       display: flex;
       flex-direction: column;
       width: 100%;
       gap: 8px;
 
-      .items__document {
+      .sidebar__accordion {
+        cursor: pointer;
         display: flex;
         align-items: center;
-        background: rgb(245, 245, 245);
+        justify-content: space-between;
         width: 100%;
-        height: 42px;
-        border-radius: 4px;
+        color: rgb(0, 0, 0);
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 22px;
+        letter-spacing: 0%;
+        text-align: left;
+        border: none;
+        background: none;
     
-        .document__icon {
+        img {
           width: 25px;
           height: 25px;
-          margin: 0 10px;
-        }
+          transform: rotate(180deg);
     
-        .document__title {
-          color: rgb(0, 0, 0);
-          font-size: 15px;
-          font-weight: 400;
-          line-height: 135%;
-          letter-spacing: 0%;
-          text-align: left;
-        }
-    
-        .document__button {
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 42px;
-          height: 100%;
-          margin-left: auto;
-          border: none;
-          border-radius: 4px;
-
-          &.refresh {background: rgb(148, 148, 148);}
-          &.download {background: rgb(244, 212, 237);}
-    
-          img {
-            width: 25px;
-            height: 25px;
+          &.active {
+            transform: rotate(0);
           }
         }
       }
 
-      .document__warning {
+      .document__container, .items__document-wrapper {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         width: 100%;
-        gap: 5px;
-        
-        p {
-          color: rgb(82, 82, 82);
-          font-size: 12px;
-          font-weight: 400;
-          line-height: 135%;
-          letter-spacing: 0%;
-          text-align: left;
+        gap: 8px;
+
+        .items__document {
+          display: flex;
+          align-items: center;
+          background: rgb(245, 245, 245);
+          width: 100%;
+          height: 42px;
+          border-radius: 4px;
+      
+          .document__icon {
+            width: 25px;
+            height: 25px;
+            margin: 0 10px;
+          }
+      
+          .document__title {
+            color: rgb(0, 0, 0);
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 135%;
+            letter-spacing: 0%;
+            text-align: left;
+          }
+      
+          .document__button {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 100%;
+            margin-left: auto;
+            border: none;
+            border-radius: 4px;
+
+            &.refresh {background: rgb(148, 148, 148);}
+            &.download {background: rgb(244, 212, 237);}
+      
+            img {
+              width: 25px;
+              height: 25px;
+            }
+          }
+        }
+
+        .document__warning {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          gap: 5px;
+          
+          p {
+            color: rgb(82, 82, 82);
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 135%;
+            letter-spacing: 0%;
+            text-align: left;
+          }
         }
       }
-    }
 
-    .items__show-more {
-      cursor: pointer;
-      color: rgb(238, 38, 194);
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 18px;
-      letter-spacing: 0%;
-      text-align: left;
-      margin-left: auto;
-      border: none;
-      background: none;
+      .items__show-more {
+        cursor: pointer;
+        color: rgb(238, 38, 194);
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: 0%;
+        text-align: left;
+        margin-left: auto;
+        border: none;
+        background: none;
+      }
     }
   }
 }

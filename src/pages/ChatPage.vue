@@ -28,5 +28,9 @@ onMounted(async () => {
   @media (max-width: 1350px) {
     padding: 0 40px 60px;
   }
+
+  @media (max-width: 1100px) {
+    flex-direction: column;
+  }
 }
 </style>
