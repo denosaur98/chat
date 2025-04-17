@@ -18,42 +18,40 @@
     </div>
     <div class="place__chat">
       <p class="start__chat-time">Сегодня, 20:43</p>
-      <div class="chat-messages">
-        <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
-          :class="{ 'my-message': message.isMine }">
-          <img :src="message.isMine ? userAvatar : botAvatar">
-          <div class="message__content">
-            <p class="message__item">{{ message.text }}</p>
-            <div class="item__info">
-              <p class="info__name">{{ message.isMine ? userName : 'Ассистент' }}</p>
-              <p class="info__time">{{ message.time }}</p>
-            </div>
+      <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
+        :class="{ 'my-message': message.isMine }">
+        <img :src="message.isMine ? userAvatar : botAvatar">
+        <div class="message__content">
+          <p class="message__item">{{ message.text }}</p>
+          <div class="item__info">
+            <p class="info__name">{{ message.isMine ? userName : 'Ассистент' }}</p>
+            <p class="info__time">{{ message.time }}</p>
           </div>
         </div>
       </div>
-      <div class="chat__text-place-wrapper">
-        <div class="chat__offers-buttons-wrapper">
-          <button class="chat__offers-button media__plan">Заказать медиаплан</button>
-          <button class="chat__offers-button report">Заказать отчет</button>
-        </div>
-        <div class="text__place-item">
-          <div class="item__controls">
-            <textarea v-model="newMessage" @keyup.enter="sendMessage"></textarea>
-            <div class="controls__buttons-wrapper">
-              <div class="file-input-wrapper">
-                <input type="file" class="file-input">
-                <img src="../../public/assets/icons/folder-icon.svg" class="file-icon">
-              </div>
-              <div class="file-input-wrapper">
-                <input type="file" class="file-input">
-                <img src="../../public/assets/icons/gallery-icon.svg" class="file-icon">
-              </div>
+    </div>
+    <div class="chat__text-place-wrapper">
+      <div class="chat__offers-buttons-wrapper">
+        <button class="chat__offers-button media__plan">Заказать медиаплан</button>
+        <button class="chat__offers-button report">Заказать отчет</button>
+      </div>
+      <div class="text__place-item">
+        <div class="item__controls">
+          <textarea v-model="newMessage" @keyup.enter="sendMessage"></textarea>
+          <div class="controls__buttons-wrapper">
+            <div class="file-input-wrapper">
+              <input type="file" class="file-input">
+              <img src="../../public/assets/icons/folder-icon.svg" class="file-icon">
+            </div>
+            <div class="file-input-wrapper">
+              <input type="file" class="file-input">
+              <img src="../../public/assets/icons/gallery-icon.svg" class="file-icon">
             </div>
           </div>
-          <button class="send__message-button" @click="sendMessage">
-            <img src="../../public/assets/icons/send-icon.svg">
-          </button>
         </div>
+        <button class="send__message-button" @click="sendMessage">
+          <img src="../../public/assets/icons/send-icon.svg">
+        </button>
       </div>
     </div>
   </div>
@@ -104,7 +102,7 @@ function sendMessage() {
 }
 
 function scrollToBottom() {
-  const container = document.querySelector('.chat-messages')
+  const container = document.querySelector('.chat__message-wrapper')
   if (container) {
     setTimeout(() => {
       container.scrollTop = container.scrollHeight
@@ -121,6 +119,7 @@ messages.value.push({
 
 <style lang="scss" scoped>
 .chat-window {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -215,14 +214,15 @@ messages.value.push({
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 160px);
     width: 100%;
-    padding: 20px 20px 160px 20px;
+    padding: 20px 20px 128px 20px;
     overflow-y: auto;
     background: rgb(235, 235, 235);
     --scrollbar-background: #f5f5f5;
     --scrollbar-thumb: rgb(244, 212, 237);
-    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     margin: 20px 0 0;
 
     &::-webkit-scrollbar {
@@ -324,121 +324,122 @@ messages.value.push({
         }
       }
     }
+  }
 
-    .chat__text-place-wrapper {
-      position: absolute;
+  .chat__text-place-wrapper {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 20px;
+    bottom: 28px;
+    left: 0;
+    padding: 0 28px;
+
+    .chat__offers-buttons-wrapper {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-      left: 0;
-      bottom: 0;
-      gap: 20px;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
 
-      .chat__offers-buttons-wrapper {
+      .chat__offers-button {
+        cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 0 20px;
+        justify-content: center;
+        padding: 12px 22px;
+        border-radius: 20px;
+        color: rgb(255, 255, 255);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 19px;
+        border: none;
 
-        .chat__offers-button {
-          cursor: pointer;
+        &.media__plan {
+          background: rgb(238, 38, 194);
+        }
+
+        &.report {
+          background: rgb(38, 118, 238);
+        }
+      }
+    }
+
+    .text__place-item {
+      display: flex;
+      padding: 20px;
+      border: 2px solid rgb(238, 38, 194);
+      background: rgb(255, 255, 255);
+      border-radius: 20px;
+      width: 100%;
+      height: 145px;
+
+      .item__controls {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+
+        textarea {
+          border: none;
+          resize: none;
+          outline: none;
+          width: 100%;
+          height: 100%;
+        }
+
+        .controls__buttons-wrapper {
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding: 12px 22px;
-          border-radius: 20px;
-          color: rgb(255, 255, 255);
-          font-size: 16px;
-          font-weight: 600;
-          line-height: 19px;
-          border: none;
+          gap: 20px;
 
-          &.media__plan {
-            background: rgb(238, 38, 194);
-          }
+          .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+          
+            .file-input {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              opacity: 0;
+              cursor: pointer;
+              z-index: 1;
+            }
 
-          &.report {
-            background: rgb(38, 118, 238);
+            .file-icon {
+              position: relative;
+              z-index: 0;
+              width: 100%;
+              height: 100%;
+              pointer-events: none;
+            }
+
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
       }
 
-      .text__place-item {
+      .send__message-button {
+        cursor: pointer;
         display: flex;
-        padding: 20px;
-        border: 2px solid rgb(238, 38, 194);
-        background: rgb(255, 255, 255);
-        border-radius: 20px;
-        width: 100%;
-        height: 145px;
-
-        .item__controls {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          gap: 8px;
-
-          textarea {
-            border: none;
-            resize: none;
-            outline: none;
-            width: 100%;
-            height: 100%;
-          }
-
-          .controls__buttons-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-
-            .file-input-wrapper {
-              position: relative;
-              display: inline-block;
-              cursor: pointer;
-              width: 25px;
-              height: 25px;
-            
-              .file-input {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                cursor: pointer;
-                z-index: 1;
-              }
-
-              .file-icon {
-                position: relative;
-                z-index: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-              }
-
-              &:hover {
-                cursor: pointer;
-              }
-            }
-          }
-        }
-
-        .send__message-button {
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 50px;
-          min-height: 50px;
-          max-width: 50px;
-          max-height: 50px;
-          border-radius: 50%;
-          background: rgb(238, 38, 194);
-          border: none;
-          margin-top: auto;
-        }
+        align-items: center;
+        justify-content: center;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+        border-radius: 50%;
+        background: rgb(238, 38, 194);
+        border: none;
+        margin-top: auto;
       }
     }
   }
