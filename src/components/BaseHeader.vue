@@ -36,6 +36,10 @@
   padding: 40px 120px;
   width: 100%;
 
+  @media (max-width: 1350px) {
+    padding: 40px;
+  }
+
   .header__logo {
     height: 32px;
     width: 220px;

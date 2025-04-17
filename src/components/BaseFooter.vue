@@ -1,7 +1,7 @@
 <template>
   <footer class="base-footer">
-    <RouterLink to="/">
-      <img src="../../public/assets/images/logo.svg" class="header__logo">
+    <RouterLink to="/" class="footer__logo">
+      <img src="../../public/assets/images/logo-grey.svg">
     </RouterLink>
     <div class="footer__control">
       <RouterLink to="/" class="control__item">Политика конфиденциальности</RouterLink>
@@ -40,6 +40,16 @@
   padding: 40px 120px;
   background: #EBEBEB;
 
+  @media (max-width: 1350px) {
+    padding: 40px;
+  }
+
+  @media (max-width: 1100px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
   .footer__logo {
     height: 32px;
     width: 220px;
@@ -49,6 +59,10 @@
     display: flex;
     align-items: center;
     gap: 65px;
+
+    @media (max-width: 1350px) {
+      gap: 30px;
+    }
 
     .control__item {
       cursor: pointer;

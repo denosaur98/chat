@@ -24,5 +24,9 @@ onMounted(async () => {
   width: 100%;
   flex: 1;
   gap: 30px;
+
+  @media (max-width: 1350px) {
+    padding: 0 40px 60px;
+  }
 }
 </style>
