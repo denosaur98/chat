@@ -16,7 +16,7 @@
         </Transition>
       </div>
     </div>
-    <div class="place__chat">
+    <div class="place__chat" ref="messagesContainer">
       <p class="start__chat-time">Сегодня, 20:43</p>
       <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
         :class="{ 'my-message': message.isMine }">
@@ -58,9 +58,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 const isPopupOpen = ref(false)
+const messagesContainer = ref(null)
 
 function closePopup() {
   isPopupOpen.value = false
@@ -102,12 +103,11 @@ function sendMessage() {
 }
 
 function scrollToBottom() {
-  const container = document.querySelector('.chat__message-wrapper')
-  if (container) {
-    setTimeout(() => {
-      container.scrollTop = container.scrollHeight
-    }, 50)
-  }
+  nextTick(() => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+    }
+  })
 }
 
 messages.value.push({
