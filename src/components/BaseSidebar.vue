@@ -8,7 +8,7 @@
       </button>
       <Transition name="fade">
         <div class="document__container" v-if="isMediaPlanOpen">
-          <div class="items__document-wrapper" v-for="document in FilesData.mediaPlans" :key="document.id">
+          <div class="items__document-wrapper" v-for="document in props.filesData.mediaPlans" :key="document.id">
             <div class="items__document">
               <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
               <h2 class="document__title">{{ document.title }}</h2>
@@ -33,7 +33,7 @@
       </button>
       <Transition name="fade">
         <div class="document__container" v-if="isReportsOpen">
-          <div class="items__document-wrapper" v-for="document in FilesData.reports" :key="document.id">
+          <div class="items__document-wrapper" v-for="document in props.filesData.reports" :key="document.id">
             <div class="items__document">
               <img src="../../public/assets/icons/document-icon.svg" class="document__icon">
               <h2 class="document__title">{{ document.title }}</h2>
@@ -55,12 +55,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import FilesData from '../../server/files.json';
+import { ref, defineProps } from 'vue';
 
 const isMediaPlanOpen = ref(false)
 const isReportsOpen = ref(false)
 
+const props = defineProps({
+  filesData: {
+    type: Object,
+    required: true
+  }
+})
 </script>
 
 <style lang="scss" scoped>

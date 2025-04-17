@@ -1,14 +1,19 @@
 <template>
   <div class="chat-page">
-    <BaseSidebar/>
-    <ChatWindow/>
+    <BaseSidebar :filesData="store.state.filesData"/>
+    <ChatWindow :filesData="store.state.filesData"/>
   </div>
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import store from '../store/index'
 import BaseSidebar from '../components/BaseSidebar'
 import ChatWindow from '../components/ChatWindow'
 
+onMounted(async () => {
+  await store.dispatch('fetchFiles')
+})
 </script>
 
 <style lang="scss" scoped>
