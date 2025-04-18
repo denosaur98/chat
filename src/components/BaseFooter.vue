@@ -1,7 +1,7 @@
 <template>
   <footer class="base-footer">
     <div class="footer__control">
-      <RouterLink to="/" class="footer__logo">
+      <RouterLink to="/" class="footer__logo" @click.prevent="logout">
         <img src="../../public/assets/images/logo-grey.svg">
       </RouterLink>
       <RouterLink to="/" class="control__politic-mobile">Политика конфиденциальности</RouterLink>
@@ -31,7 +31,15 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import store from '../store/index.js'
 
+const router = useRouter()
+
+function logout() {
+  store.commit('RESET_STATE')
+  router.push('/')
+}
 </script>
 
 <style lang="scss" scoped>
