@@ -1,38 +1,67 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 
-const getDefaultState = () => ({
-	filesData: {},
-	isAuthorized: false,
-	userData: {},
-})
+function loadState() {
+	try {
+		const serializedState = localStorage.getItem('vuex-auth')
+		return serializedState ? JSON.parse(serializedState) : { isAuthorized: false, userData: {} }
+	} catch (e) {
+		console.error(e)
+		return {
+			isAuthorized: false,
+			userData: {},
+		}
+	}
+}
 
 export default createStore({
-	state: getDefaultState,
+	state: loadState(),
 	mutations: {
-		SET_FILES(state, data) {
-			state.filesData = data
-		},
-		SET_AUTH(state, payload) {
-			state.isAuthorized = payload.isAuthorized
-			state.userData = payload.userData
+		SET_AUTH(state, { isAuthorized, userData }) {
+			state.isAuthorized = isAuthorized
+			state.userData = userData || {}
+			localStorage.setItem(
+				'vuex-auth',
+				JSON.stringify({
+					isAuthorized: state.isAuthorized,
+					userData: state.userData,
+				})
+			)
 		},
 		RESET_STATE(state) {
-			Object.assign(state, getDefaultState())
+			state.isAuthorized = false
+			state.userData = {}
+			localStorage.removeItem('vuex-auth')
 		},
 	},
 	actions: {
-		async fetchFiles({ commit }) {
+		async fetchFiles() {
 			try {
 				const response = await axios.get(`${process.env.VUE_APP_API_URL}/files`)
-				commit('SET_FILES', response.data)
 				return response.data
 			} catch (e) {
 				console.error(e)
 			}
 		},
-		resetState({ commit }) {
-			commit('RESET_STATE')
+
+		async fetchMessages() {
+			try {
+				const response = await axios.get(`${process.env.VUE_APP_API_URL}/messages`)
+				return response.data
+			} catch (e) {
+				console.error(e)
+			}
+		},
+
+		async sendMessage(_, messageText) {
+			try {
+				return await axios.post(`${process.env.VUE_APP_API_URL}/message`, {
+					text: messageText,
+					isMine: true,
+				})
+			} catch (e) {
+				console.error(e)
+			}
 		},
 	},
 })

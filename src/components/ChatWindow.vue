@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import store from '../store/index'
 
 const isPopupOpen = ref(false)
@@ -84,7 +84,7 @@ function formatTime() {
   return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-function sendMessage() {
+async function sendMessage() {
   if (!newMessage.value.trim()) return
 
   messages.value.push({
@@ -93,19 +93,21 @@ function sendMessage() {
     time: formatTime()
   })
 
-  newMessage.value = ''
-
-  setTimeout(() => {
-    messages.value.push({
-      text: `Вы написали: "${messages.value[messages.value.length - 1].text}"`,
-      isMine: false,
-      time: formatTime()
-    })
-
-    scrollToBottom()
-  }, 1000)
-
   scrollToBottom()
+
+  try {
+    await store.dispatch('sendMessage', newMessage.value)
+
+    await store.dispatch('fetchMessages')
+
+    setTimeout(() => {
+      addBotMessage(`Вы написали: "${newMessage.value}"`)
+      newMessage.value = ''  
+    }, 1000)
+
+  } catch(e) {
+    console.error(e)
+  }
 }
 
 function scrollToBottom() {
@@ -138,10 +140,21 @@ function orderDocument(document) {
   }
 }
 
-messages.value.push({
-  text: 'Добрый день! Чем могу помочь?',
-  isMine: false,
-  time: formatTime()
+function addBotMessage(text) {
+  messages.value.push({
+    text,
+    isMine: false,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  })
+  scrollToBottom()
+}
+
+onMounted(async () => {
+  messages.value = await store.dispatch('fetchMessages')
+  if (messages.value.length === 0) {
+    addBotMessage('Добрый день! Чем могу помочь?')
+  }
+  scrollToBottom()
 })
 </script>
 

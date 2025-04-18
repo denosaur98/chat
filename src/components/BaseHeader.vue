@@ -1,6 +1,6 @@
 <template>
   <header class="base-header" v-if="store.state.isAuthorized">
-    <RouterLink to="/">
+    <RouterLink to="/" @click.prevent="logout">
       <img src="../../public/assets/images/logo.svg" class="header__logo">
     </RouterLink>
     <div class="header__control">
@@ -11,11 +11,11 @@
         </div>
         <div class="control__items user">
           <img src="../../public/assets/icons/user-icon.svg">
-          <RouterLink to="/" v-if="store.state.userData?.mail">{{ store.state.userData.mail }}</RouterLink>
+          <RouterLink to="/chat" v-if="store.state.userData?.mail">{{ store.state.userData.mail }}</RouterLink>
         </div>
       </div>
       <div class="control__items">
-        <RouterLink to="/" class="items__button">
+        <RouterLink to="/" class="items__button" @click.prevent="logout">
           <img src="../../public/assets/icons/setting-icon.svg">
         </RouterLink>
         <RouterLink to="/" class="items__button" @click.prevent="logout">
@@ -32,13 +32,9 @@ import store from '../store/index.js'
 
 const router = useRouter()
 
-async function logout() {
-  try {
-    await store.dispatch('resetState')
-    router.push('/')
-  } catch (e) {
-    console.error(e)
-  }
+function logout() {
+  store.commit('RESET_STATE')
+  router.push('/')
 }
 </script>
 

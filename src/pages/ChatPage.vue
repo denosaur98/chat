@@ -1,18 +1,20 @@
 <template>
   <div class="chat-page">
-    <BaseSidebar :filesData="store.state.filesData"/>
-    <ChatWindow :filesData="store.state.filesData"/>
+    <BaseSidebar :filesData="filesData"/>
+    <ChatWindow :filesData="filesData"/>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import store from '../store/index'
 import BaseSidebar from '../components/BaseSidebar'
 import ChatWindow from '../components/ChatWindow'
 
+const filesData = ref([])
+
 onMounted(async () => {
-  await store.dispatch('fetchFiles')
+  filesData.value = await store.dispatch('fetchFiles')
 })
 </script>
 
