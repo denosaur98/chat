@@ -15,26 +15,40 @@
         </div>
       </div>
       <div class="control__items">
-        <RouterLink to="/" class="items__button" @click.prevent="logout">
+        <button class="items__button" @click="togglePopup">
           <img src="../../public/assets/icons/setting-icon.svg">
-        </RouterLink>
+        </button>
         <RouterLink to="/" class="items__button" @click.prevent="logout">
           <img src="../../public/assets/icons/logout-icon.svg">
         </RouterLink>
+        <BasePopup :isOpen="isPopupOpen" @close="closePopup">
+          <button @click="closePopup">Редактировать профиль</button>
+          <button @click="closePopup">Загрузить аватар</button>
+        </BasePopup>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import store from '../store/index.js'
+import BasePopup from './BasePopup.vue'
 
 const router = useRouter()
 
 function logout() {
   store.commit('RESET_STATE')
   router.push('/')
+}
+
+const isPopupOpen = ref(false)
+function togglePopup() {
+  isPopupOpen.value = !isPopupOpen.value
+}
+function closePopup() {
+  isPopupOpen.value = false
 }
 </script>
 
@@ -84,6 +98,7 @@ function logout() {
     }
 
     .control__items {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -142,6 +157,7 @@ function logout() {
       }
 
       .items__button {
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -149,6 +165,7 @@ function logout() {
         height: 40px;
         background: rgb(255, 255, 255);
         border-radius: 50%;
+        border: none;
 
         @media (max-width: 800px) {
           background: rgb(245, 245, 245);

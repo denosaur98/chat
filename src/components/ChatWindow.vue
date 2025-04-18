@@ -8,12 +8,10 @@
         <button class="info__menu" @click="togglePopup">
           <img src="../../public/assets/icons/burger-icon.svg">
         </button>
-        <Transition name="fade">
-          <div class="info__popup" v-if="isPopupOpen" v-click-outside="closePopup">
-            <button class="popup__button" @click="closePopup">Обратная связь о работе сервиса</button>
-            <button class="popup__button" @click="closePopup">Сменить помощника</button>
-          </div>
-        </Transition>
+        <BasePopup :isOpen="isPopupOpen" @close="closePopup">
+          <button @click="closePopup">Обратная связь о работе сервиса</button>
+          <button @click="closePopup">Сменить помощника</button>
+        </BasePopup>
       </div>
     </div>
     <div class="place__chat" ref="messagesContainer"  v-if="!isLoading && messages.length > 0">
@@ -64,18 +62,16 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import store from '../store/index'
+import BasePopup from './BasePopup.vue'
 
-const isPopupOpen = ref(false)
 const messagesContainer = ref(null)
 
+const isPopupOpen = ref(false)
 function togglePopup() {
   isPopupOpen.value = !isPopupOpen.value
 }
-
-function closePopup(event) {
-  if (!event?.target.closest('.info__menu')) {
-    isPopupOpen.value = false
-  }
+function closePopup() {
+  isPopupOpen.value = false
 }
 
 const userAvatar = ref('/assets/icons/user-icon.svg')
@@ -256,38 +252,6 @@ onMounted(async () => {
           position: absolute;
           top: 0;
           right: 0;
-        }
-      }
-
-      .info__popup {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        padding: 15px 30px;
-        width: 330px;
-        gap: 10px;
-        border-radius: 8px;
-        box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.08);
-        top: 50px;
-        right: 0;
-        z-index: 999;
-        background: #fff;
-
-        .popup__button {
-          cursor: pointer;
-          border: none;
-          background: none;
-          color: rgb(0, 0, 0);
-          font-size: 16px;
-          font-weight: 500;
-          line-height: 19px;
-          text-align: right;
-          width: 100%;
-
-          &:hover {
-            color: rgb(238, 38, 194);
-            transition: .2s;
-          }
         }
       }
     }
@@ -571,15 +535,5 @@ onMounted(async () => {
       }
     }
   }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
