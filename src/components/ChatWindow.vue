@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="place__chat" ref="messagesContainer"  v-if="!isLoading && messages.length > 0">
-      <p class="start__chat-time">Сегодня, 20:43</p>
+      <p class="start__chat-time">{{ formatChatStartTime() }}</p>
       <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
         :class="{ 'my-message': message.isMine }">
         <img :src="message.isMine ? userAvatar : botAvatar">
@@ -86,6 +86,21 @@ const messages = ref([])
 function formatTime() {
   const now = new Date()
   return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+
+function formatChatStartTime() {
+  if (messages.value.length === 0) return ''
+  
+  const firstMessageDate = messages.value[0].createdAt ? new Date(messages.value[0].createdAt) : new Date()
+  
+  const options = { 
+    weekday: 'long', 
+    year: 'numeric',
+    month: 'long', 
+    day: 'numeric',
+  }
+  
+  return firstMessageDate.toLocaleDateString('ru-RU', options)
 }
 
 async function sendMessage() {
