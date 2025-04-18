@@ -8,29 +8,28 @@
     </div>
     <div class="footer__control">
       <RouterLink to="/" class="control__politic-desktop">Политика конфиденциальности</RouterLink>
-      <RouterLink to="/" class="control__item mail">
+      <a href="mailto:pinkchicken@adaurum.ru" class="control__item mail">
         <img src="../../public/assets/icons/sms-icon.svg">
         pinkchicken@adaurum.ru
-      </RouterLink>
+      </a>
       <div class="control__items-wrapper lang">
         <img src="../../public/assets/icons/global-icon.svg">
-        <button class="control__item active">RU</button>
-        <button class="control__item">EN</button>
-        <button class="control__item">TUR</button>
+        <button :class="['control__item', { active: currentLang === lang.code }]" @click="changeLanguage(lang.code)" v-for="lang in languages" :key="lang.code">{{ lang.label }}</button>
       </div>
       <div class="control__items-wrapper contacts">
-        <RouterLink to="/" class="items__social">
+        <a href="tg:pinkchicken" class="items__social">
           <img src="../../public/assets/icons/tg-icon.svg">
-        </RouterLink>
-        <RouterLink to="/" class="items__social">
+        </a>
+        <a href="whatsapp:pinkchicken" class="items__social">
           <img src="../../public/assets/icons/wa-icon.svg">
-        </RouterLink>
+        </a>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import store from '../store/index.js'
 
@@ -39,6 +38,16 @@ const router = useRouter()
 function logout() {
   store.commit('RESET_STATE')
   router.push('/')
+}
+
+const currentLang = ref('ru')
+const languages = [
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+  { code: 'tr', label: 'TUR' }
+]
+function changeLanguage(lang) {
+  currentLang.value = lang
 }
 </script>
 
