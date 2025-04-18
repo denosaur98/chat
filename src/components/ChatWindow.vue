@@ -16,7 +16,7 @@
         </Transition>
       </div>
     </div>
-    <div class="place__chat" ref="messagesContainer">
+    <div class="place__chat" ref="messagesContainer"  v-if="!isLoading && messages.length > 0">
       <p class="start__chat-time">Сегодня, 20:43</p>
       <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
         :class="{ 'my-message': message.isMine }">
@@ -29,6 +29,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="chat__is-empty" v-else>
+      <img src="../../public/assets/images/chat-empty.png">
+      <p>Чат недоступен, проверьте интернет-соединение</p>
     </div>
     <div class="chat__text-place-wrapper">
       <div class="chat__offers-buttons-wrapper">
@@ -149,11 +153,12 @@ function addBotMessage(text) {
   scrollToBottom()
 }
 
+const isLoading = ref(true)
+
 onMounted(async () => {
-  messages.value = await store.dispatch('fetchMessages')
-  if (messages.value.length === 0) {
-    addBotMessage('Добрый день! Чем могу помочь?')
-  }
+  const loadedMessages = await store.dispatch('fetchMessages')
+  messages.value = loadedMessages || []
+  isLoading.value = false
   scrollToBottom()
 })
 </script>
@@ -391,6 +396,28 @@ onMounted(async () => {
           }
         }
       }
+    }
+  }
+
+  .chat__is-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding-top: 20px;
+
+    img {
+      width: 220px;
+      height: auto;
+    }
+
+    p {
+      color: rgb(0, 0, 0);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 145%;
+      text-align: center;
     }
   }
 

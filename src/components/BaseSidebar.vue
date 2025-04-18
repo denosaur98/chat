@@ -57,7 +57,7 @@
     </div>
     <div class="sidebar__is-empty" v-else>
       <img src="../../public/assets/images/sidebar-empty.png">
-      <p>Закажи у личного помощника медиаплан. Он появится в этом разделе</p>
+      <p>Файлы недоступны, проверьте интернет-соединение</p>
     </div>
   </div>
 </template>
@@ -76,9 +76,9 @@ const props = defineProps({
   }
 })
 
-const hasFilesData = computed(() => props.filesData && (props.filesData.mediaPlans || props.filesData.reports))
-const hasMediaPlans = computed(() => props.filesData?.mediaPlans?.length > 0)
-const hasReports = computed(() => props.filesData?.reports?.length > 0)
+const hasMediaPlans = computed(() => Array.isArray(props.filesData?.mediaPlans) && props.filesData.mediaPlans.length > 0)
+const hasReports = computed(() =>Array.isArray(props.filesData?.reports) && props.filesData.reports.length > 0)
+const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
 </script>
 
 <style lang="scss" scoped>

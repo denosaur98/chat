@@ -9,6 +9,15 @@ const router = express.Router()
 
 let messages = []
 
+messages.push({
+	id: Date.now(),
+	username: 'Бот',
+	text: 'Добрый день, чем могу помочь?',
+	isMine: false,
+	time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+	createdAt: new Date(),
+})
+
 router.get('/files', (req, res) => {
 	const filePath = path.join(__dirname, 'files.json')
 	res.sendFile(filePath)
