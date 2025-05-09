@@ -55,7 +55,7 @@ export default createStore({
 
 		async sendMessage(_, messageText) {
 			try {
-				return await axios.post(`${process.env.VUE_APP_API_URL}/message`, {
+				return await axios.post(`${process.env.VUE_APP_API_URL}/messages`, {
 					text: messageText,
 					isMine: true,
 				})
