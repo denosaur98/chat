@@ -5,24 +5,46 @@
         <button :class="!isAuth ? 'active' : ''" @click="switchReg">Зарегистрироваться</button>
         <button :class="isAuth ? 'active' : ''" @click="switchAuth">Войти</button>
       </div>
-      <input placeholder="Введите логин:" v-model="login">
-      <input placeholder="Введите почту:" v-model="mail">
-      <input placeholder="Введите пароль:" v-model="password">
-      <RouterLink to="/chat" @click.prevent="isAuth ? loggedIn() : registration()">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
+      <div class="input-wrapper">
+        <input placeholder="Введите логин:" v-model="login" v-if="!isAuth">
+        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
+      </div>
+      <div class="input-wrapper">
+        <input placeholder="Введите почту:" v-model="mail">
+        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
+      </div>
+      <div class="input-wrapper">
+        <input placeholder="Введите пароль:" v-model="password" type="password">
+        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
+      </div>
+      <RouterLink to="/chat" @click.prevent="isAuth ? loginUser() : registration()">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import store from '../store/index';
 
-const isAuth = ref(false)
+const router = useRouter()
 
+const errorMessage = ref('')
+function handleError(error) {
+  if (error.response?.data?.message) {
+    errorMessage.value = Array.isArray(error.response.data.message) ? error.response.data.message.join('\n') : error.response.data.message
+  } else {
+    errorMessage.value = 'Произошла ошибка. Пожалуйста, попробуйте снова.'
+  }
+}
+
+const isAuth = ref(false)
 function switchAuth() {
+  errorMessage.value = ''
   isAuth.value = true
 }
 function switchReg() {
+  errorMessage.value = ''
   isAuth.value = false
 }
 
@@ -30,14 +52,45 @@ const login = ref('')
 const mail = ref('')
 const password = ref('')
 
-function registration() {
-  const response = store.dispatch('registration', { name: login.value, mail: mail.value, password: password.value })
-  if(response) {
-    loggedIn()
+async function registration() {
+  try {
+    errorMessage.value = ''
+    const response = await store.dispatch('registration', { 
+      name: login.value, 
+      mail: mail.value, 
+      password: password.value 
+    });
+    
+    if (response) {
+      loggedIn()
+      router.push('/chat')
+    }
+  } catch (e) {
+    handleError(e)
   }
 }
+async function loginUser() {
+  try {
+    errorMessage.value = ''
+    const response = await store.dispatch('auth', { mail: mail.value, password: password.value })
+    
+    if (response) {
+      loggedIn()
+      router.push('/chat')
+    }
+  } catch (e) {
+    handleError(e)
+  }
+}
+
 function loggedIn() {
-  store.commit('SET_AUTH', { isAuthorized: true, userData: { login: login.value, mail: mail.value } })
+  store.commit('SET_AUTH', { 
+    isAuthorized: true, 
+    userData: { 
+      login: login.value, 
+      mail: mail.value 
+    } 
+  })
 }
 </script>
 
@@ -89,16 +142,28 @@ function loggedIn() {
       }
     }
 
-    input {
-      outline: none;
-      border: none;
-      font-size: 15px;
-      border-radius: 5px;
-      width: 100%;
-      padding: 10px 15px;
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
 
-      @media (max-width: 800px) {
-        border: 2px solid rgba(0, 0, 0, 0.5);
+      input {
+        outline: none;
+        border: none;
+        font-size: 15px;
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px 15px;
+    
+        @media (max-width: 800px) {
+          border: 2px solid rgba(0, 0, 0, 0.5);
+        }
+      }
+
+      p {
+        position: absolute;
+        font-size: 10px;
+        color: rgb(194, 42, 42);
       }
     }
   }

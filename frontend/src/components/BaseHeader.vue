@@ -40,6 +40,7 @@ const router = useRouter()
 
 function logout() {
   store.commit('RESET_STATE')
+  store.dispatch('logout')
   router.push('/')
 }
 
