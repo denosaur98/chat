@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaClient } from 'generated/prisma';
 import { RegisterRequest } from './dto/register.dto';
+import { hash } from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
       data: {
         name,
         email,
-        password,
+        password: await hash(password),
       },
     });
 
