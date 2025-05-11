@@ -35,6 +35,19 @@ export default createStore({
 		},
 	},
 	actions: {
+		async registration(_, payload) {
+			try {
+				const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/registration`, {
+					name: payload.name,
+					email: payload.mail,
+					password: payload.password,
+				})
+				return response.data
+			} catch (e) {
+				console.error(e)
+			}
+		},
+
 		async fetchFiles() {
 			try {
 				const response = await axios.get(`${process.env.VUE_APP_API_URL}/files`)
