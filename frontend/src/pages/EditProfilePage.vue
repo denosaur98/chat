@@ -1,7 +1,7 @@
 <template>
   <div class="edit-profile-page">
     <h1>Редактирование данных</h1>
-    <div class="profile__inputs-wrapper">
+    <form type="submit" class="profile__inputs-wrapper">
       <div class="item__input">
         <h2>{{ store.state.userData?.login }}</h2>
         <input placeholder="Введите новый логин:" v-model="login">
@@ -18,7 +18,7 @@
         <input class="inputs__file-btn" type="file" id="upload">
       </div>
       <button>Сохранить</button>
-    </div>
+    </form>
   </div>
 </template>
 

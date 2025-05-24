@@ -126,7 +126,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Projects\\pink-chicken\\backend\\generated\\prisma",
+      "value": "D:\\Projects\\chat\\backend\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -140,7 +140,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Projects\\pink-chicken\\backend\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Projects\\chat\\backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -1,8 +1,22 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UsePipes, ValidationPipe, Res, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  HttpCode,
+  HttpStatus,
+  UsePipes,
+  ValidationPipe,
+  Res,
+  Req,
+} from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterRequest } from './dto/register.dto';
 import { LoginRequest } from './dto/login.dto';
+import { UpdateUserRequest } from './dto/update.dto';
+import { UserPayload } from 'src/auth/interfaces/user-payload.interface';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +45,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  async logout(@Res({ passthrough: true }) res: Response) {
+  logout(@Res({ passthrough: true }) res: Response) {
     return this.authService.logout(res);
   }
 
@@ -43,5 +57,16 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.authService.refresh(req, res);
+  }
+
+  @Patch('update')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  async updateUser(
+    @Res({ passthrough: true }) res: Response,
+    @Body() dto: UpdateUserRequest,
+    @CurrentUser() user: UserPayload,
+  ) {
+    return this.authService.updateUser(res, dto, user.id);
   }
 }

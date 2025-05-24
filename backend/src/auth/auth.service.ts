@@ -1,12 +1,19 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from 'generated/prisma';
 import { RegisterRequest } from './dto/register.dto';
+import { LoginRequest } from './dto/login.dto';
+import { UpdateUserRequest } from './dto/update.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import type { JwtPayload } from './interfaces/jwt.interface';
-import { LoginRequest } from './dto/login.dto';
 import { isDev } from 'src/utils/isDev';
 
 @Injectable()
@@ -79,7 +86,7 @@ export class AuthService {
     return this.auth(res, user.id);
   }
 
-  async logout(res: Response) {
+  logout(res: Response) {
     this.setCookie(res, 'refreshToken', new Date(0));
     return true;
   }
@@ -109,6 +116,45 @@ export class AuthService {
 
       return this.auth(res, user.id);
     }
+  }
+
+  async updateUser(
+    res: Response,
+    dto: UpdateUserRequest,
+    currentUserId: string,
+  ) {
+    const { name, email, password } = dto;
+
+    const existUser = await this.prismaClient.user.findUnique({
+      where: {
+        email,
+        NOT: {
+          id: currentUserId,
+        },
+      },
+    });
+
+    if (existUser) {
+      throw new ConflictException('Пользователь с такой почтой уже существует');
+    }
+
+    const updateData: { name?: string; email?: string; password?: string } = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (password) updateData.password = await hash(password);
+
+    if (Object.keys(updateData).length === 0) {
+      throw new BadRequestException('Нет данных для обновления');
+    }
+
+    const updatedUser = await this.prismaClient.user.update({
+      where: {
+        id: currentUserId,
+      },
+      data: updateData,
+    });
+
+    return this.auth(res, updatedUser.id);
   }
 
   private auth(res: Response, id: string) {

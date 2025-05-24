@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, MaxLength, IsEmail, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  MaxLength,
+  IsEmail,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterRequest {
   @IsString({ message: 'Имя должно быть строкой' })
