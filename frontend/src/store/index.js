@@ -4,11 +4,12 @@ import axios from 'axios'
 function loadState() {
 	try {
 		const serializedState = localStorage.getItem('vuex-auth')
-		return serializedState ? JSON.parse(serializedState) : { isAuthorized: false, userData: {} }
+		return serializedState ? JSON.parse(serializedState) : { isAuthorized: false, userData: {}, loginErrorMessage: null }
 	} catch (e) {
 		console.error(e)
 		return {
 			isAuthorized: false,
+			loginErrorMessage: null,
 			userData: {},
 		}
 	}
@@ -28,6 +29,9 @@ export default createStore({
 				})
 			)
 		},
+		SET_LOGIN_ERROR(state, message) {
+			state.loginErrorMessage = message
+		},
 		RESET_STATE(state) {
 			state.isAuthorized = false
 			state.userData = {}
@@ -35,28 +39,36 @@ export default createStore({
 		},
 	},
 	actions: {
-		async registration(_, payload) {
+		async registration({ commit }, payload) {
 			try {
 				const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/registration`, {
 					name: payload.name,
 					email: payload.mail,
 					password: payload.password,
 				})
+				commit('SET_LOGIN_ERROR', null)
 				return response.data
 			} catch (e) {
-				console.error(e)
+				const errorMessage = e.response?.data?.message
+				commit('SET_LOGIN_ERROR', errorMessage)
+				console.error(errorMessage)
+				throw errorMessage
 			}
 		},
 
-		async auth(_, payload) {
+		async auth({ commit }, payload) {
 			try {
 				const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, {
 					email: payload.mail,
 					password: payload.password,
 				})
+				commit('SET_LOGIN_ERROR', null)
 				return response.data
 			} catch (e) {
-				console.error(e)
+				const errorMessage = e.response?.data?.message
+				commit('SET_LOGIN_ERROR', errorMessage)
+				console.error(errorMessage)
+				throw errorMessage
 			}
 		},
 

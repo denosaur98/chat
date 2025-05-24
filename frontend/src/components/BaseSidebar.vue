@@ -176,7 +176,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
 
         &.media__plan-btn {
           border: none;
-        
+
           @media (max-width: 800px) {
             border: 1px solid rgb(238, 38, 194);
             border-radius: 4px;
@@ -191,7 +191,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
             border-radius: 4px;
           }
         }
-    
+
         .arrow-icon {
           width: 25px;
           height: 25px;
@@ -200,7 +200,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
           @media (max-width: 800px) {
             display: none;
           }
-    
+
           &.active {
             transform: rotate(0);
           }
@@ -230,7 +230,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
           width: 100%;
           height: 42px;
           border-radius: 4px;
-      
+
           .document__icon {
             width: 25px;
             height: 25px;
@@ -240,7 +240,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
               display: none;
             }
           }
-      
+
           .document__title {
             color: rgb(0, 0, 0);
             font-size: 15px;
@@ -254,7 +254,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
               margin: 0 10px;
             }
           }
-      
+
           .document__button {
             cursor: pointer;
             display: flex;
@@ -268,7 +268,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
 
             &.refresh {background: rgb(148, 148, 148);}
             &.download {background: rgb(244, 212, 237);}
-      
+
             img {
               width: 25px;
               height: 25px;
@@ -281,7 +281,7 @@ const hasFilesData = computed(() => hasMediaPlans.value || hasReports.value)
           align-items: center;
           width: 100%;
           gap: 5px;
-          
+
           p {
             color: rgb(82, 82, 82);
             font-size: 12px;

@@ -5,17 +5,15 @@
         <button :class="!isAuth ? 'active' : ''" @click="switchReg">Зарегистрироваться</button>
         <button :class="isAuth ? 'active' : ''" @click="switchAuth">Войти</button>
       </div>
-      <div class="input-wrapper">
+      <div class="inputs-wrapper">
         <input placeholder="Введите логин:" v-model="login" v-if="!isAuth">
-        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
-      </div>
-      <div class="input-wrapper">
         <input placeholder="Введите почту:" v-model="mail">
-        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
-      </div>
-      <div class="input-wrapper">
         <input placeholder="Введите пароль:" v-model="password" type="password">
-        <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
+        <Transition name="fade">
+          <div class="errors-wrapper" v-if="errorMessage.length > 0">
+            <p class="error-message"  v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>
+          </div>
+        </Transition>
       </div>
       <RouterLink to="/chat" @click.prevent="isAuth ? loginUser() : registration()" class="auth__link">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
     </div>
@@ -29,13 +27,11 @@ import store from '../store/index';
 
 const router = useRouter()
 
-const errorMessage = ref('')
-function handleError(error) {
-  if (error.response?.data?.message) {
-    errorMessage.value = Array.isArray(error.response.data.message) ? error.response.data.message.join('\n') : error.response.data.message
-  } else {
-    errorMessage.value = 'Произошла ошибка. Пожалуйста, попробуйте снова.'
-  }
+const errorMessage = ref([])
+function normalizeErrors(err) {
+  if (!err) return []
+  if (Array.isArray(err)) return err
+  return [err]
 }
 
 const isAuth = ref(false)
@@ -59,14 +55,14 @@ async function registration() {
       name: login.value,
       mail: mail.value,
       password: password.value
-    });
+    })
 
     if (response) {
       loggedIn()
       router.push('/chat')
     }
-  } catch (e) {
-    handleError(e)
+  } catch {
+    errorMessage.value = normalizeErrors(store.state.loginErrorMessage)
   }
 }
 async function loginUser() {
@@ -78,8 +74,8 @@ async function loginUser() {
       loggedIn()
       router.push('/chat')
     }
-  } catch (e) {
-    handleError(e)
+  } catch {
+    errorMessage.value = normalizeErrors(store.state.loginErrorMessage)
   }
 }
 
@@ -105,6 +101,7 @@ function loggedIn() {
   min-height: 700px;
 
   .auth__inputs {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 500px;
@@ -143,10 +140,11 @@ function loggedIn() {
       }
     }
 
-    .input-wrapper {
+    .inputs-wrapper {
       position: relative;
       display: flex;
       flex-direction: column;
+      gap: 15px;
 
       input {
         outline: none;
@@ -161,10 +159,16 @@ function loggedIn() {
         }
       }
 
-      p {
-        position: absolute;
-        font-size: 10px;
-        color: rgb(194, 42, 42);
+      .errors-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-top: auto;
+
+        .error-message {
+          font-size: 15px;
+          color: rgb(194, 42, 42);
+        }
       }
     }
 
@@ -193,5 +197,15 @@ function loggedIn() {
     width: 100%;
     margin-top: 30px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
