@@ -2,9 +2,17 @@
   <div class="edit-profile-page">
     <h1>Редактирование данных</h1>
     <div class="profile__inputs-wrapper">
-      <input placeholder="Введите логин:" v-model="login">
-      <input placeholder="Введите почту:" v-model="mail">
-      <input placeholder="Введите пароль:" v-model="password" type="password">
+      <div class="item__input">
+        <h2>{{ store.state.userData?.login }}</h2>
+        <input placeholder="Введите новый логин:" v-model="login">
+      </div>
+      <div class="item__input">
+        <h2>{{ store.state.userData?.mail }}</h2>
+        <input placeholder="Введите новую почту:" v-model="mail">
+      </div>
+      <div class="item__input">
+        <input placeholder="Введите новый пароль:" v-model="password" type="password">
+      </div>
       <div class="upload__avatar-wrapper">
         <label for="upload">Загрузить</label>
         <input class="inputs__file-btn" type="file" id="upload">
@@ -16,6 +24,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import store from '../store/index.js'
 
 const login = ref('')
 const mail = ref('')
@@ -45,12 +54,24 @@ const password = ref('')
     display: flex;
     flex-direction: column;
     width: 500px;
-    min-height: 370px;
+    min-height: 400px;
     gap: 20px;
 
     @media (max-width: 800px) {
       width: 100%;
       padding: 20px;
+    }
+
+    .item__input {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 70px;
+      gap: 10px;
+
+      h2 {
+        font-size: 15px;
+      }
     }
 
     input {
@@ -82,6 +103,8 @@ const password = ref('')
       }
 
       .inputs__file-btn {
+        border: none;
+
         &::-webkit-file-upload-button {
           display: none !important;
         }
