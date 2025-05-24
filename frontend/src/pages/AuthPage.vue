@@ -17,7 +17,7 @@
         <input placeholder="Введите пароль:" v-model="password" type="password">
         <p v-if="errorMessage !== ''" class="error-message">{{ errorMessage }}</p>
       </div>
-      <RouterLink to="/chat" @click.prevent="isAuth ? loginUser() : registration()">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
+      <RouterLink to="/chat" @click.prevent="isAuth ? loginUser() : registration()" class="auth__link">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
     </div>
   </div>
 </template>
@@ -55,12 +55,12 @@ const password = ref('')
 async function registration() {
   try {
     errorMessage.value = ''
-    const response = await store.dispatch('registration', { 
-      name: login.value, 
-      mail: mail.value, 
-      password: password.value 
+    const response = await store.dispatch('registration', {
+      name: login.value,
+      mail: mail.value,
+      password: password.value
     });
-    
+
     if (response) {
       loggedIn()
       router.push('/chat')
@@ -73,7 +73,7 @@ async function loginUser() {
   try {
     errorMessage.value = ''
     const response = await store.dispatch('auth', { mail: mail.value, password: password.value })
-    
+
     if (response) {
       loggedIn()
       router.push('/chat')
@@ -84,12 +84,12 @@ async function loginUser() {
 }
 
 function loggedIn() {
-  store.commit('SET_AUTH', { 
-    isAuthorized: true, 
-    userData: { 
-      login: login.value, 
-      mail: mail.value 
-    } 
+  store.commit('SET_AUTH', {
+    isAuthorized: true,
+    userData: {
+      login: login.value,
+      mail: mail.value
+    }
   })
 }
 </script>
@@ -108,6 +108,7 @@ function loggedIn() {
     display: flex;
     flex-direction: column;
     width: 500px;
+    min-height: 370px;
     gap: 20px;
 
     @media (max-width: 800px) {
@@ -154,7 +155,7 @@ function loggedIn() {
         border-radius: 5px;
         width: 100%;
         padding: 10px 15px;
-    
+
         @media (max-width: 800px) {
           border: 2px solid rgba(0, 0, 0, 0.5);
         }
@@ -165,6 +166,10 @@ function loggedIn() {
         font-size: 10px;
         color: rgb(194, 42, 42);
       }
+    }
+
+    .auth__link {
+      margin-top: auto;
     }
   }
 
