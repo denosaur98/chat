@@ -33,6 +33,7 @@ import BaseFooter from './components/BaseFooter'
   background: #f5f5f5;
   width: 100%;
   min-height: 100vh;
+  overflow: hidden;
 
   @media (max-width: 800px) {
     background: #fff;

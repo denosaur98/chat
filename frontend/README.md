@@ -1,4 +1,4 @@
-# pink-chicken
+# chat
 
 ## Project setup
 ```

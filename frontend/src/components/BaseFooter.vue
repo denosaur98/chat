@@ -2,15 +2,15 @@
   <footer class="base-footer">
     <div class="footer__control">
       <RouterLink to="/" class="footer__logo" @click.prevent="logout">
-        <img src="../../public/assets/images/logo-grey.svg">
+        <img src="../../public/assets/images/logo.png">
       </RouterLink>
       <RouterLink to="/" class="control__politic-mobile">Политика конфиденциальности</RouterLink>
     </div>
     <div class="footer__control">
       <RouterLink to="/" class="control__politic-desktop">Политика конфиденциальности</RouterLink>
-      <a href="mailto:pinkchicken@adaurum.ru" class="control__item mail">
+      <a href="mailto:denosaur98@yandex.ru" class="control__item mail">
         <img src="../../public/assets/icons/sms-icon.svg">
-        pinkchicken@adaurum.ru
+        denosaur98@yandex.ru
       </a>
       <div class="control__items-wrapper lang">
         <img src="../../public/assets/icons/global-icon.svg">
@@ -57,11 +57,11 @@ function changeLanguage(lang) {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 40px 120px;
+  padding: 20px 120px;
   background: #EBEBEB;
 
   @media (max-width: 1350px) {
-    padding: 40px;
+    padding: 20px 40px;
   }
 
   @media (max-width: 1100px) {
@@ -71,12 +71,17 @@ function changeLanguage(lang) {
   }
 
   @media (max-width: 800px) {
-    padding: 40px 20px;
+    padding: 20px;
   }
 
   .footer__logo {
-    height: 32px;
-    width: 220px;
+    height: 80px;
+    width: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   @media (max-width: 1100px) {

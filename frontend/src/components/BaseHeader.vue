@@ -1,7 +1,7 @@
 <template>
   <header class="base-header" v-if="store.state.isAuthorized">
     <RouterLink to="/" @click.prevent="logout">
-      <img src="../../public/assets/images/logo.svg" class="header__logo">
+      <img src="../../public/assets/images/logo.png" class="header__logo">
     </RouterLink>
     <div class="header__control">
       <div class="control__user-info">
@@ -58,23 +58,23 @@ function closePopup() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 120px;
+  padding: 20px 120px;
   width: 100%;
 
   @media (max-width: 1350px) {
-    padding: 40px;
+    padding: 20px 40px;
   }
 
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
-    padding: 40px 20px;
+    padding: 20px;
   }
 
   .header__logo {
-    height: 32px;
-    width: 220px;
+    height: 80px;
+    width: auto;
   }
 
   .header__control {
