@@ -1,11 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import AuthPage from '../pages/AuthPage.vue'
 import ChatPage from '../pages/ChatPage.vue'
+import EditProfilePage from '../pages/EditProfilePage.vue'
 import store from '../store/index'
 
 const routes = [
 	{ path: '/', component: AuthPage },
 	{ path: '/chat', component: ChatPage },
+	{ path: '/edit-profile', component: EditProfilePage },
 ]
 
 const router = createRouter({

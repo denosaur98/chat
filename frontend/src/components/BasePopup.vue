@@ -45,10 +45,10 @@ function handleClickOutside() {
     line-height: 19px;
     text-align: right;
     width: 100%;
+    transition: .2s;
 
     &:hover {
       color: rgb(238, 38, 194);
-      transition: .2s;
     }
   }
 }

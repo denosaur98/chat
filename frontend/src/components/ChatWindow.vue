@@ -86,16 +86,16 @@ function formatTime() {
 
 function formatChatStartTime() {
   if (messages.value.length === 0) return ''
-  
+
   const firstMessageDate = messages.value[0].createdAt ? new Date(messages.value[0].createdAt) : new Date()
-  
-  const options = { 
-    weekday: 'long', 
+
+  const options = {
+    weekday: 'long',
     year: 'numeric',
-    month: 'long', 
+    month: 'long',
     day: 'numeric',
   }
-  
+
   return firstMessageDate.toLocaleDateString('ru-RU', options)
 }
 
@@ -117,7 +117,7 @@ async function sendMessage() {
 
     setTimeout(() => {
       addBotMessage(`Вы написали: "${newMessage.value}"`)
-      newMessage.value = ''  
+      newMessage.value = ''
     }, 1000)
 
   } catch(e) {
@@ -280,11 +280,11 @@ onMounted(async () => {
       width: 6px;
       background-color: var(--scrollbar-background);
     }
-  
+
     &::-webkit-scrollbar-thumb {
       background-color: var(--scrollbar-thumb);
     }
-  
+
     &::-webkit-scrollbar-thumb:hover {
       background-color: var(--scrollbar-thumb);
     }
@@ -492,7 +492,7 @@ onMounted(async () => {
             cursor: pointer;
             width: 25px;
             height: 25px;
-          
+
             .file-input {
               position: absolute;
               left: 0;

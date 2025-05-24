@@ -15,26 +15,20 @@
         </div>
       </div>
       <div class="control__items">
-        <button class="items__button" @click="togglePopup">
+        <RouterLink to="/edit-profile" class="items__button" @click="togglePopup">
           <img src="../../public/assets/icons/setting-icon.svg">
-        </button>
+        </RouterLink>
         <RouterLink to="/" class="items__button" @click.prevent="logout">
           <img src="../../public/assets/icons/logout-icon.svg">
         </RouterLink>
-        <BasePopup :isOpen="isPopupOpen" @close="closePopup">
-          <button @click="closePopup">Редактировать профиль</button>
-          <button @click="closePopup">Загрузить аватар</button>
-        </BasePopup>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import store from '../store/index.js'
-import BasePopup from './BasePopup.vue'
 
 const router = useRouter()
 
@@ -42,14 +36,6 @@ function logout() {
   store.commit('RESET_STATE')
   store.dispatch('logout')
   router.push('/')
-}
-
-const isPopupOpen = ref(false)
-function togglePopup() {
-  isPopupOpen.value = !isPopupOpen.value
-}
-function closePopup() {
-  isPopupOpen.value = false
 }
 </script>
 
@@ -90,7 +76,7 @@ function closePopup() {
       display: flex;
       align-items: center;
       gap: 25px;
-    
+
       @media (max-width: 800px) {
         flex-direction: column;
         align-items: flex-start;
