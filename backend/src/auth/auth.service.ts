@@ -128,6 +128,9 @@ export class AuthService {
     const existUser = await this.prismaClient.user.findUnique({
       where: {
         email,
+        NOT: {
+          id: currentUserId,
+        },
       },
     });
 
@@ -154,8 +157,17 @@ export class AuthService {
     return this.auth(res, updatedUser.id);
   }
 
-  private auth(res: Response, id: string) {
+  private async auth(res: Response, id: string) {
     const { accessToken, refreshToken } = this.generateTokens(id);
+
+    const user = await this.prismaClient.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
 
     this.setCookie(
       res,
@@ -163,7 +175,10 @@ export class AuthService {
       new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
     );
 
-    return { accessToken };
+    return {
+      accessToken,
+      userData: user,
+    };
   }
 
   private generateTokens(id: string) {

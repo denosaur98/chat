@@ -23,6 +23,7 @@ export default createStore({
 			state.userData = {
 				...state.userData,
 				...userData,
+				name: userData.name || state.userData.name || userData.email.split('@')[0]
 			}
 			localStorage.setItem(
 				'vuex-auth',
@@ -102,9 +103,9 @@ export default createStore({
 					isAuthorized: true,
 					userData: {
 						...state.userData,
+						...response.data.userData,
 						name: payload.name || state.userData.name,
 						email: payload.email || state.userData.email,
-						...response.data.userData,
 					},
 				})
 				commit('SET_LOGIN_ERROR', null)
