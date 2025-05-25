@@ -9,11 +9,7 @@
         <input placeholder="Введите логин:" v-model="name" v-if="!isAuth">
         <input placeholder="Введите почту:" v-model="email">
         <input placeholder="Введите пароль:" v-model="password" type="password">
-        <Transition name="fade">
-          <div class="errors-wrapper" v-if="errorMessage.length > 0">
-            <p class="error-message" v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>
-          </div>
-        </Transition>
+        <ErrorMessages :errorMessage="errorMessage"/>
         <button type="submit" class="auth__link">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</button>
       </form>
     </div>
@@ -24,15 +20,11 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import store from '../store/index';
+import ErrorMessages from '../components/ErrorMessages';
 
 const router = useRouter()
 
 const errorMessage = ref([])
-function normalizeErrors(err) {
-  if (!err) return []
-  if (Array.isArray(err)) return err
-  return [err]
-}
 
 const isAuth = ref(false)
 function switchAuth() {
@@ -62,7 +54,7 @@ async function registration() {
       router.push('/chat')
     }
   } catch {
-    errorMessage.value = normalizeErrors(store.state.loginErrorMessage)
+    errorMessage.value = store.state.loginErrorMessage
   }
 }
 async function loginUser() {
@@ -75,7 +67,7 @@ async function loginUser() {
       router.push('/chat')
     }
   } catch {
-    errorMessage.value = normalizeErrors(store.state.loginErrorMessage)
+    errorMessage.value = store.state.loginErrorMessage
   }
 }
 
@@ -145,7 +137,7 @@ function loggedIn() {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      min-height: 275px;
+      min-height: 350px;
 
       input {
         outline: none;
@@ -157,18 +149,6 @@ function loggedIn() {
 
         @media (max-width: 800px) {
           border: 2px solid rgba(0, 0, 0, 0.5);
-        }
-      }
-
-      .errors-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        margin-top: auto;
-
-        .error-message {
-          font-size: 15px;
-          color: rgb(194, 42, 42);
         }
       }
 
@@ -194,15 +174,5 @@ function loggedIn() {
       }
     }
   }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

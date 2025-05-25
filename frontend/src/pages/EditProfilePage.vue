@@ -17,25 +17,35 @@
         <label for="upload">Загрузить</label>
         <input class="inputs__file-btn" type="file" id="upload">
       </div>
+      <ErrorMessages :errorMessage="errorMessage" />
       <button type="submit">Сохранить</button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import store from '../store/index.js'
+import { ref } from 'vue';
+import store from '../store/index.js';
+import ErrorMessages from '../components/ErrorMessages';
+
+const errorMessage = ref([])
 
 const name = ref('')
 const email = ref('')
 const password = ref('')
 
 async function saveChanges() {
-  await store.dispatch('update', {
-    name: name.value,
-    email: email.value,
-    password: password.value
-  })
+  try {
+    errorMessage.value = ''
+
+    await store.dispatch('update', {
+      name: name.value,
+      email: email.value,
+      password: password.value
+    })
+  } catch {
+    errorMessage.value = store.state.loginErrorMessage
+  }
 }
 </script>
 
@@ -62,7 +72,7 @@ async function saveChanges() {
     display: flex;
     flex-direction: column;
     width: 500px;
-    min-height: 400px;
+    min-height: 500px;
     gap: 20px;
 
     @media (max-width: 800px) {
