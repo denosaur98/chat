@@ -128,9 +128,6 @@ export class AuthService {
     const existUser = await this.prismaClient.user.findUnique({
       where: {
         email,
-        NOT: {
-          id: currentUserId,
-        },
       },
     });
 

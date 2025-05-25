@@ -38,11 +38,20 @@ async function saveChanges() {
   try {
     errorMessage.value = ''
 
+    if (!name.value && !email.value && !password.value) {
+      errorMessage.value = 'Заполните хотя бы одно поле для обновления'
+      return
+    }
+
     await store.dispatch('update', {
       name: name.value,
       email: email.value,
       password: password.value
     })
+
+    name.value = ''
+    email.value = ''
+    password.value = ''
   } catch {
     errorMessage.value = store.state.loginErrorMessage
   }
