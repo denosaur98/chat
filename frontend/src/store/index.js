@@ -24,7 +24,6 @@ export default createStore({
 				...state.userData,
 				...userData,
 			}
-			console.log(state.userData)
 			localStorage.setItem(
 				'vuex-auth',
 				JSON.stringify({

@@ -1,7 +1,7 @@
 <template>
   <div class="edit-profile-page">
     <h1>Редактирование данных</h1>
-    <form type="submit" class="profile__inputs-wrapper">
+    <form @submit.prevent="saveChanges" class="profile__inputs-wrapper">
       <div class="item__input">
         <h2>{{ store.state.userData?.name }}</h2>
         <input placeholder="Введите новый логин:" v-model="name">
@@ -17,7 +17,7 @@
         <label for="upload">Загрузить</label>
         <input class="inputs__file-btn" type="file" id="upload">
       </div>
-      <button @click="saveChanges">Сохранить</button>
+      <button type="submit">Сохранить</button>
     </form>
   </div>
 </template>
@@ -30,10 +30,10 @@ const name = ref('')
 const email = ref('')
 const password = ref('')
 
-function saveChanges() {
-  store.dispatch('update', {
-    name: name.value || store.state.userData.name,
-    email: email.value || store.state.userData.email,
+async function saveChanges() {
+  await store.dispatch('update', {
+    name: name.value,
+    email: email.value,
     password: password.value
   })
 }
