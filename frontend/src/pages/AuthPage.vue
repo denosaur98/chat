@@ -1,21 +1,21 @@
 <template>
   <div class="auth-page">
-    <div class="auth__inputs">
+    <div type="submit" class="auth__inputs">
       <div class="auth__buttons-switch">
         <button :class="!isAuth ? 'active' : ''" @click="switchReg">Зарегистрироваться</button>
         <button :class="isAuth ? 'active' : ''" @click="switchAuth">Войти</button>
       </div>
-      <div class="inputs-wrapper">
-        <input placeholder="Введите логин:" v-model="login" v-if="!isAuth">
-        <input placeholder="Введите почту:" v-model="mail">
+      <form type="submit" class="inputs-wrapper">
+        <input placeholder="Введите логин:" v-model="name" v-if="!isAuth">
+        <input placeholder="Введите почту:" v-model="email">
         <input placeholder="Введите пароль:" v-model="password" type="password">
         <Transition name="fade">
           <div class="errors-wrapper" v-if="errorMessage.length > 0">
             <p class="error-message"  v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>
           </div>
         </Transition>
-      </div>
-      <RouterLink to="/chat" @click.prevent="isAuth ? loginUser() : registration()" class="auth__link">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</RouterLink>
+        <button @click.prevent="isAuth ? loginUser() : registration()" class="auth__link">{{ isAuth ? 'Войти' : 'Зарегистрироваться' }}</button>
+      </form>
     </div>
   </div>
 </template>
@@ -44,16 +44,16 @@ function switchReg() {
   isAuth.value = false
 }
 
-const login = ref('')
-const mail = ref('')
+const name = ref('')
+const email = ref('')
 const password = ref('')
 
 async function registration() {
   try {
     errorMessage.value = ''
     const response = await store.dispatch('registration', {
-      name: login.value,
-      mail: mail.value,
+      name: name.value,
+      email: email.value,
       password: password.value
     })
 
@@ -68,7 +68,7 @@ async function registration() {
 async function loginUser() {
   try {
     errorMessage.value = ''
-    const response = await store.dispatch('auth', { mail: mail.value, password: password.value })
+    const response = await store.dispatch('auth', { email: email.value, password: password.value })
 
     if (response) {
       loggedIn()
@@ -83,8 +83,8 @@ function loggedIn() {
   store.commit('SET_AUTH', {
     isAuthorized: true,
     userData: {
-      login: login.value,
-      mail: mail.value
+      name: name.value,
+      email: email.value
     }
   })
 }
@@ -145,6 +145,7 @@ function loggedIn() {
       display: flex;
       flex-direction: column;
       gap: 15px;
+      min-height: 270px;
 
       input {
         outline: none;
@@ -173,29 +174,25 @@ function loggedIn() {
     }
 
     .auth__link {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 29px;
+      letter-spacing: 0%;
+      text-align: left;
+      background: none;
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-decoration: none;
+      width: 100%;
       margin-top: auto;
     }
-  }
-
-  a {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 15px;
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 29px;
-    letter-spacing: 0%;
-    text-align: left;
-    background: none;
-    border: 2px solid rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    text-decoration: none;
-    width: 100%;
-    margin-top: 30px;
   }
 }
 

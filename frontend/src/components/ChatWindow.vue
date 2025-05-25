@@ -3,8 +3,8 @@
     <div class="window__navigation">
       <h1>Личный помощник</h1>
       <div class="navigation__info">
-        <p class="info__nickname">{{ store.state.userData.login }}</p>
-        <p class="info__mail">{{ store.state.userData.mail }}</p>
+        <p class="info__nickname">{{ store.state.userData.name }}</p>
+        <p class="info__mail">{{ store.state.userData.email }}</p>
         <button class="info__menu" @click="togglePopup">
           <img src="../../public/assets/icons/burger-icon.svg">
         </button>
@@ -22,7 +22,7 @@
         <div class="message__content">
           <p class="message__item">{{ message.text }}</p>
           <div class="item__info">
-            <p class="info__name">{{ message.isMine ? store.state.userData.login : 'Ассистент' }}</p>
+            <p class="info__name">{{ message.isMine ? store.state.userData.name : 'Ассистент' }}</p>
             <p class="info__time">{{ message.time }}</p>
           </div>
         </div>

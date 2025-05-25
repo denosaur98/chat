@@ -11,7 +11,7 @@
         </div>
         <div class="control__items user">
           <img src="../../public/assets/icons/user-icon.svg">
-          <RouterLink to="/chat" v-if="store.state.userData?.mail">{{ store.state.userData.mail }}</RouterLink>
+          <RouterLink to="/chat" v-if="store.state.userData?.email">{{ store.state.userData.email }}</RouterLink>
         </div>
       </div>
       <div class="control__items">

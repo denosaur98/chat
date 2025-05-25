@@ -20,7 +20,11 @@ export default createStore({
 	mutations: {
 		SET_AUTH(state, { isAuthorized, userData }) {
 			state.isAuthorized = isAuthorized
-			state.userData = userData || {}
+			state.userData = {
+				...state.userData,
+				...userData,
+			}
+			console.log(state.userData)
 			localStorage.setItem(
 				'vuex-auth',
 				JSON.stringify({
@@ -43,7 +47,7 @@ export default createStore({
 			try {
 				const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/registration`, {
 					name: payload.name,
-					email: payload.mail,
+					email: payload.email,
 					password: payload.password,
 				})
 				commit('SET_LOGIN_ERROR', null)
@@ -59,8 +63,50 @@ export default createStore({
 		async auth({ commit }, payload) {
 			try {
 				const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, {
-					email: payload.mail,
+					email: payload.email,
 					password: payload.password,
+				})
+				commit('SET_AUTH', {
+					isAuthorized: true,
+					userData: {
+						...response.data.userData,
+						accessToken: response.data.accessToken,
+					},
+				})
+				commit('SET_LOGIN_ERROR', null)
+				return response.data
+			} catch (e) {
+				const errorMessage = e.response?.data?.message
+				commit('SET_LOGIN_ERROR', errorMessage)
+				console.error(errorMessage)
+				throw errorMessage
+			}
+		},
+
+		async update({ commit, state }, payload) {
+			try {
+				const response = await axios.patch(
+					`${process.env.VUE_APP_API_URL}/auth/update`,
+					{
+						name: payload.name,
+						email: payload.email,
+						password: payload.password,
+					},
+					{
+						headers: {
+							Authorization: `Bearer ${state.userData.accessToken}`,
+						},
+						withCredentials: true,
+					}
+				)
+				commit('SET_AUTH', {
+					isAuthorized: true,
+					userData: {
+						...state.userData,
+						name: payload.name || state.userData.name,
+						email: payload.email || state.userData.email,
+						...response.data.userData,
+					},
 				})
 				commit('SET_LOGIN_ERROR', null)
 				return response.data

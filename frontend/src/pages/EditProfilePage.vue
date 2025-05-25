@@ -3,12 +3,12 @@
     <h1>Редактирование данных</h1>
     <form type="submit" class="profile__inputs-wrapper">
       <div class="item__input">
-        <h2>{{ store.state.userData?.login }}</h2>
-        <input placeholder="Введите новый логин:" v-model="login">
+        <h2>{{ store.state.userData?.name }}</h2>
+        <input placeholder="Введите новый логин:" v-model="name">
       </div>
       <div class="item__input">
-        <h2>{{ store.state.userData?.mail }}</h2>
-        <input placeholder="Введите новую почту:" v-model="mail">
+        <h2>{{ store.state.userData?.email }}</h2>
+        <input placeholder="Введите новую почту:" v-model="email">
       </div>
       <div class="item__input">
         <input placeholder="Введите новый пароль:" v-model="password" type="password">
@@ -17,7 +17,7 @@
         <label for="upload">Загрузить</label>
         <input class="inputs__file-btn" type="file" id="upload">
       </div>
-      <button>Сохранить</button>
+      <button @click="saveChanges">Сохранить</button>
     </form>
   </div>
 </template>
@@ -26,9 +26,17 @@
 import { ref } from 'vue'
 import store from '../store/index.js'
 
-const login = ref('')
-const mail = ref('')
+const name = ref('')
+const email = ref('')
 const password = ref('')
+
+function saveChanges() {
+  store.dispatch('update', {
+    name: name.value || store.state.userData.name,
+    email: email.value || store.state.userData.email,
+    password: password.value
+  })
+}
 </script>
 
 <style lang="scss" scoped>
