@@ -1,14 +1,20 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { QuickButtonsService } from './quick-buttons.service';
-import { GetButtonsDto } from './dto/get-buttons.dto';
-import { ButtonResponseDto } from './dto/button-response.dto';
 
 @Controller('quick-buttons')
 export class QuickButtonsController {
-  constructor(private readonly quickButtonsService: QuickButtonsService) {}
+  constructor(private readonly buttonsService: QuickButtonsService) {}
 
   @Get(':messengerType')
-  getButtons(@Param() params: GetButtonsDto): ButtonResponseDto[] {
-    return this.quickButtonsService.getButtonsByMessenger(params.messengerType);
+  getButtons(@Param('messengerType') messengerType: string) {
+    return this.buttonsService.getButtonsByMessenger(messengerType);
+  }
+
+  @Post('response')
+  handleButtonClick(@Body() body: { messengerType: string; buttonId: number }) {
+    return this.buttonsService.getButtonResponse(
+      body.messengerType,
+      body.buttonId,
+    );
   }
 }
