@@ -50,7 +50,7 @@
           v-for="buttons in quickButtons"
           :key="buttons.id"
           class="chat__offers-button"
-          @click="orderDocument('mediaPlan')"
+          @click="orderDocument(buttons.id)"
         >
           {{ buttons.text }}
         </button>
@@ -151,28 +151,6 @@ function scrollToBottom() {
   })
 }
 
-function orderDocument(document) {
-  const randomId = Math.floor(10000 + Math.random() * 90000)
-
-  if(document === 'mediaPlan') {
-    messages.value.push({
-      text: `Новый медиаплан № ${randomId} успешно создан!`,
-      isMine: false,
-      time: formatTime()
-    })
-
-    scrollToBottom()
-  } else {
-    messages.value.push({
-      text: `Новый отчет № ${randomId} успешно сформирован!`,
-      isMine: false,
-      time: formatTime()
-    })
-
-    scrollToBottom()
-  }
-}
-
 function addBotMessage(text) {
   messages.value.push({
     text,
@@ -195,6 +173,20 @@ const activeMessenger = ref('telegram')
 async function changeMessenger(messengerId) {
   activeMessenger.value = messengerId
   quickButtons.value = await store.dispatch('fetchQuickButtons', messengerId)
+}
+async function orderDocument(buttonId) {
+  const responseText = await store.dispatch('chooseQuickButton', {
+    messenger: activeMessenger.value,
+    buttonId: buttonId
+  })
+
+  messages.value.push({
+    text: responseText,
+    isMine: false,
+    time: formatTime()
+  })
+
+  scrollToBottom()
 }
 
 onMounted(async () => {

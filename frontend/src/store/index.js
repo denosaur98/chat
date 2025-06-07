@@ -154,6 +154,18 @@ export default createStore({
 			}
 		},
 
+		async chooseQuickButton(_, { messenger, buttonId }) {
+			try {
+				const response = await axios.post(`${process.env.VUE_APP_API_URL}/quick-buttons/response`, {
+					messengerType: messenger,
+					buttonId: buttonId
+				})
+				return response.data
+			} catch (e) {
+				console.error(e)
+			}
+		},
+
 		async sendMessage(_, messageText) {
 			try {
 				return await axios.post(`${process.env.VUE_APP_API_URL}/messages`, {
