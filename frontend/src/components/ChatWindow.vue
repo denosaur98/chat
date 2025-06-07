@@ -1,7 +1,20 @@
 <template>
   <div class="chat-window">
     <div class="window__navigation">
-      <h1>Личный помощник</h1>
+      <div class="navigation__header">
+        <h1>Личный помощник</h1>
+        <div class="header__nav-buttons">
+          <button
+            v-for="button in messengers"
+            :key="button.id"
+            @click="changeMessenger(button.id)"
+            class="nav-button"
+            :class="{ 'active__messenger': activeMessenger === button.id }"
+          >
+            <font-awesome-icon :icon="button.icon" />
+          </button>
+        </div>
+      </div>
       <div class="navigation__info">
         <p class="info__nickname">{{ store.state.userData.name }}</p>
         <p class="info__mail">{{ store.state.userData.email }}</p>
@@ -16,8 +29,7 @@
     </div>
     <div class="place__chat" ref="messagesContainer"  v-if="!isLoading && messages.length > 0">
       <p class="start__chat-time">{{ formatChatStartTime() }}</p>
-      <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper"
-        :class="{ 'my-message': message.isMine }">
+      <div v-for="(message, index) in messages" :key="index" class="chat__message-wrapper" :class="{ 'my-message': message.isMine }">
         <img :src="message.isMine ? userAvatar : botAvatar">
         <div class="message__content">
           <p class="message__item">{{ message.text }}</p>
@@ -60,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import store from '../store/index'
 import BasePopup from './BasePopup.vue'
 
@@ -166,6 +178,17 @@ function addBotMessage(text) {
 
 const isLoading = ref(true)
 
+const messengers = reactive([
+  { id: 'telegram', icon: ['fab', 'telegram'] },
+  { id: 'whatsapp', icon: ['fab', 'square-whatsapp'] },
+  { id: 'vk', icon: ['fab', 'vk'] },
+  { id: 'sms', icon: ['fas', 'sms'] },
+])
+const activeMessenger = ref('telegram')
+function changeMessenger(messengerId) {
+  activeMessenger.value = messengerId
+}
+
 onMounted(async () => {
   const loadedMessages = await store.dispatch('fetchMessages')
   messages.value = loadedMessages || []
@@ -195,7 +218,7 @@ onMounted(async () => {
 
   .window__navigation {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     width: 100%;
 
@@ -206,13 +229,43 @@ onMounted(async () => {
       gap: 20px;
     }
 
-    h1 {
-      color: rgb(0, 0, 0);
-      font-size: 24px;
-      font-weight: 600;
-      line-height: 29px;
-      letter-spacing: 0%;
-      text-align: left;
+    .navigation__header {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+
+      h1 {
+        color: rgb(0, 0, 0);
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 29px;
+        letter-spacing: 0%;
+        text-align: left;
+      }
+
+      .header__nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .nav-button {
+          cursor: pointer;
+          display: flex;
+          width: 25px;
+          height: 25px;
+          background: none;
+          border: none;
+          transition: .3s;
+
+          svg {
+            width: 100%;
+            height: 100%;
+          }
+
+          &.active__messenger { color: rgb(238, 38, 194); }
+        }
+      }
     }
 
     .navigation__info {
