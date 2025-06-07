@@ -46,8 +46,14 @@
     </div>
     <div class="chat__text-place-wrapper">
       <div class="chat__offers-buttons-wrapper">
-        <button class="chat__offers-button media__plan" @click="orderDocument('mediaPlan')">Заказать медиаплан</button>
-        <button class="chat__offers-button report" @click="orderDocument('report')">Заказать отчет</button>
+        <button
+          v-for="buttons in quickButtons"
+          :key="buttons.id"
+          class="chat__offers-button"
+          @click="orderDocument('mediaPlan')"
+        >
+          {{ buttons.text }}
+        </button>
       </div>
       <div class="text__place-item">
         <div class="item__controls">
@@ -178,6 +184,7 @@ function addBotMessage(text) {
 
 const isLoading = ref(true)
 
+const quickButtons = ref([])
 const messengers = reactive([
   { id: 'telegram', icon: ['fab', 'telegram'] },
   { id: 'whatsapp', icon: ['fab', 'square-whatsapp'] },
@@ -185,13 +192,14 @@ const messengers = reactive([
   { id: 'sms', icon: ['fas', 'sms'] },
 ])
 const activeMessenger = ref('telegram')
-function changeMessenger(messengerId) {
+async function changeMessenger(messengerId) {
   activeMessenger.value = messengerId
+  quickButtons.value = await store.dispatch('fetchQuickButtons', messengerId)
 }
 
 onMounted(async () => {
-  const loadedMessages = await store.dispatch('fetchMessages')
-  messages.value = loadedMessages || []
+  messages.value = await store.dispatch('fetchMessages') || []
+  quickButtons.value = await store.dispatch('fetchQuickButtons', activeMessenger.value) || []
   isLoading.value = false
   scrollToBottom()
 })
@@ -493,7 +501,7 @@ onMounted(async () => {
         line-height: 19px;
         border: none;
 
-        &.media__plan {
+        &:first-child {
           background: rgb(238, 38, 194);
 
           @media (max-width: 800px) {
@@ -501,7 +509,7 @@ onMounted(async () => {
           }
         }
 
-        &.report {
+        &:last-child {
           background: rgb(38, 118, 238);
 
           @media (max-width: 800px) {

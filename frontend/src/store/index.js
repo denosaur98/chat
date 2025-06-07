@@ -145,6 +145,15 @@ export default createStore({
 			}
 		},
 
+		async fetchQuickButtons(_, messenger) {
+			try {
+				const response = await axios.get(`${process.env.VUE_APP_API_URL}/quick-buttons/${messenger}`)
+				return response.data
+			} catch (e) {
+				console.error(e)
+			}
+		},
+
 		async sendMessage(_, messageText) {
 			try {
 				return await axios.post(`${process.env.VUE_APP_API_URL}/messages`, {
