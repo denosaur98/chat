@@ -57,9 +57,14 @@
       </div>
       <div class="text__place-item">
         <div class="item__controls">
-          <textarea v-model="newMessage" @keyup.enter="sendMessage" :maxlength="textLimit || 4096" @input="updateRemainingChars"/>
+          <textarea
+            v-model="newMessage"
+            @keyup.enter="sendMessage"
+            :maxlength="textLimit || undefined"
+            @input="updateRemainingChars"
+          />
           <p
-            v-if="remainingChars !== null || textLimit !== undefined"
+            v-if="textLimit !== null"
             class="char-counter"
             :class="{
               'char-counter--warning': remainingChars < 100,
@@ -128,9 +133,9 @@ function formatChatStartTime() {
 }
 
 async function sendMessage() {
-  if (!newMessage.value.trim()) return;
+  if (!newMessage.value.trim()) return
 
-  if (textLimit.value !== null && newMessage.value.length > textLimit.value) {
+  if (textLimit.value != null && newMessage.value.length > textLimit.value) {
     addBotMessage(`Сообщение слишком длинное. Максимум ${textLimit.value} символов.`)
     return
   }
@@ -151,6 +156,9 @@ async function sendMessage() {
     setTimeout(() => {
       addBotMessage(`Вы написали: "${newMessage.value}"`)
       newMessage.value = ''
+      if (textLimit.value !== null) {
+        remainingChars.value = textLimit.value
+      }
     }, 1000)
 
   } catch(e) {
@@ -178,7 +186,7 @@ function addBotMessage(text) {
 const isLoading = ref(true)
 
 const quickButtons = ref([])
-const textLimit = ref(null)
+const textLimit = ref(4096)
 const remainingChars = ref(4096)
 const activeMessenger = ref('telegram')
 const messengers = reactive([
@@ -190,8 +198,8 @@ const messengers = reactive([
 async function changeMessenger(messengerId) {
   activeMessenger.value = messengerId
   quickButtons.value = await store.dispatch('fetchQuickButtons', messengerId)
-  textLimit.value = quickButtons.value.limit
-  updateRemainingChars()
+  textLimit.value = quickButtons.value.limit ?? null
+  remainingChars.value = textLimit.value !== null ? textLimit.value - newMessage.value.length : null
 }
 async function orderDocument(buttonId) {
   const responseText = await store.dispatch('chooseQuickButton', {
@@ -208,16 +216,16 @@ async function orderDocument(buttonId) {
   scrollToBottom()
 }
 function updateRemainingChars() {
-  if (textLimit.value !== null && textLimit.value !== undefined) {
+  if (textLimit.value !== null) {
     remainingChars.value = textLimit.value - newMessage.value.length
-  } else {
-    remainingChars.value = null
   }
 }
 
 onMounted(async () => {
   messages.value = await store.dispatch('fetchMessages') || []
   quickButtons.value = await store.dispatch('fetchQuickButtons', activeMessenger.value) || []
+  textLimit.value = quickButtons.value.limit ?? 4096
+  remainingChars.value = textLimit.value
   isLoading.value = false
   scrollToBottom()
 })
