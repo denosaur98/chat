@@ -5,6 +5,7 @@ import { FilesModule } from './files/files.module';
 import { MessagesModule } from './messages/messages.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { QuickButtonsModule } from './quick-buttons/quick-buttons.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     FilesModule,
     MessagesModule,
     AuthModule,
+    QuickButtonsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
