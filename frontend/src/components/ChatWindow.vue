@@ -47,7 +47,7 @@
     <div class="chat__text-place-wrapper">
       <div class="chat__offers-buttons-wrapper">
         <button
-          v-for="buttons in quickButtons"
+          v-for="buttons in quickButtons.buttonItems"
           :key="buttons.id"
           class="chat__offers-button"
           @click="orderDocument(buttons.id)"
@@ -57,7 +57,17 @@
       </div>
       <div class="text__place-item">
         <div class="item__controls">
-          <textarea v-model="newMessage" @keyup.enter="sendMessage"></textarea>
+          <textarea v-model="newMessage" @keyup.enter="sendMessage" :maxlength="textLimit || 4096" @input="updateRemainingChars"/>
+          <p
+            v-if="remainingChars !== null || textLimit !== undefined"
+            class="char-counter"
+            :class="{
+              'char-counter--warning': remainingChars < 100,
+              'char-counter--error': remainingChars < 20
+            }"
+          >
+            Осталось символов: {{ remainingChars }}
+          </p>
           <div class="controls__buttons-wrapper">
             <div class="file-input-wrapper">
               <input type="file" class="file-input">
@@ -118,7 +128,12 @@ function formatChatStartTime() {
 }
 
 async function sendMessage() {
-  if (!newMessage.value.trim()) return
+  if (!newMessage.value.trim()) return;
+
+  if (textLimit.value !== null && newMessage.value.length > textLimit.value) {
+    addBotMessage(`Сообщение слишком длинное. Максимум ${textLimit.value} символов.`)
+    return
+  }
 
   messages.value.push({
     text: newMessage.value,
@@ -163,16 +178,20 @@ function addBotMessage(text) {
 const isLoading = ref(true)
 
 const quickButtons = ref([])
+const textLimit = ref(null)
+const remainingChars = ref(4096)
+const activeMessenger = ref('telegram')
 const messengers = reactive([
   { id: 'telegram', icon: ['fab', 'telegram'] },
   { id: 'whatsapp', icon: ['fab', 'square-whatsapp'] },
   { id: 'vk', icon: ['fab', 'vk'] },
   { id: 'sms', icon: ['fas', 'sms'] },
 ])
-const activeMessenger = ref('telegram')
 async function changeMessenger(messengerId) {
   activeMessenger.value = messengerId
   quickButtons.value = await store.dispatch('fetchQuickButtons', messengerId)
+  textLimit.value = quickButtons.value.limit
+  updateRemainingChars()
 }
 async function orderDocument(buttonId) {
   const responseText = await store.dispatch('chooseQuickButton', {
@@ -187,6 +206,13 @@ async function orderDocument(buttonId) {
   })
 
   scrollToBottom()
+}
+function updateRemainingChars() {
+  if (textLimit.value !== null && textLimit.value !== undefined) {
+    remainingChars.value = textLimit.value - newMessage.value.length
+  } else {
+    remainingChars.value = null
+  }
 }
 
 onMounted(async () => {
@@ -521,6 +547,7 @@ onMounted(async () => {
       height: 145px;
 
       .item__controls {
+        position: relative;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -532,6 +559,23 @@ onMounted(async () => {
           outline: none;
           width: 100%;
           height: 100%;
+        }
+
+        .char-counter {
+          position: absolute;
+          right: -50px;
+          top: -15px;
+          color: #666;
+          font-size: 12px;
+          text-align: right;
+
+          &--warning {
+            color: orange;
+          }
+
+          &--error {
+            color: red;
+          }
         }
 
         .controls__buttons-wrapper {
