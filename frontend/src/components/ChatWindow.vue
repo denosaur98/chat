@@ -135,11 +135,6 @@ function formatChatStartTime() {
 async function sendMessage() {
   if (!newMessage.value.trim()) return
 
-  if (textLimit.value != null && newMessage.value.length > textLimit.value) {
-    addBotMessage(`Сообщение слишком длинное. Максимум ${textLimit.value} символов.`)
-    return
-  }
-
   messages.value.push({
     text: newMessage.value,
     isMine: true,
